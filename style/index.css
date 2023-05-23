@@ -1,37 +1,11 @@
-/* 
-  .css-button-retro--green {
-    min-width: 130px;
-    height: 40px;
-    color: #fff;
-    padding: 5px 10px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    display: inline-block;
-    outline: none;
-    border: 1px solid #adadad;
-    color: #ffffff;
-    background: transparent;
-    z-index: 0;
-  }
-  .css-button-retro--green:hover:after {
-    top: 0;
-    left: 0;
-  }
-  .css-button-retro--green:after {
-    content: "";
-    width: 100%;
-    z-index: -1;
-    position: absolute;
-    height: 100%;
-    top: 5px;
-    left: 5px;
-    transition: 0.2s;
-    background-color: #207a35;
-  } */
 
 
+.title{
+  letter-spacing: 1px;
+  text-align: center;
+  color: #03643a;
+
+}
   .css-button-sliding-to-left--green {
     min-width: 130px;
     height: 40px;
@@ -39,7 +13,7 @@
     padding: 5px 10px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 1.00s ease;
     position: relative;
     display: inline-block;
     outline: none;
@@ -47,8 +21,8 @@
     z-index: 0;
     background: #fff;
     overflow: hidden;
-    border: 2px solid #00351e;
-    color: #00351e;
+    border: 2px solid #03643a;
+    color: #03643a;
   }
   .css-button-sliding-to-left--green:hover {
     color: #fff;
@@ -65,5 +39,5 @@
     top: 0;
     width: 0;
     height: 100%;
-    background: #00351e;
+    background: #03643a;
   }
