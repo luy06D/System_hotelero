@@ -10,10 +10,10 @@ class Usuario extends Conexion{
     $this->acceso = parent::getConexion();
   }
 
-  public function iniciarSesion($nombreusuario = "CALL spu_usuarios_login(?)"){
+  public function iniciarSesion($nombreusuario = "" ){
     //Manejador de excepciones try - catch
     try{
-      $query = $this->acceso->prepare("");
+      $query = $this->acceso->prepare("CALL spu_usuarios_login(?)");
       $query->execute(array($nombreusuario));
 
       return $query->fetch(PDO::FETCH_ASSOC);

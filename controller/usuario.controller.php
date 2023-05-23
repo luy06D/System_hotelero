@@ -2,19 +2,19 @@
 
 require_once '../model/usuario.php';
 
-if(isset($_GET['operacion'])){
+if(isset($_POST['operacion'])){
 
   //Instancia de la clase usuario
   $usuario = new Usuario();
 
-  if($_GET['operacion'] == 'destruir'){
+  if($_POST['operacion'] == 'destruir'){
     session_destroy(); //Elimina la sesión
     session_unset(); //unset libera recursos
     header('Location:../index.html');
   }
 
 
-  if($_GET['operacion'] == 'iniciarSesion'){
+  if($_POST['operacion'] == 'iniciarSesion'){
     
     $acceso = [
       "login"     => false,
@@ -23,8 +23,8 @@ if(isset($_GET['operacion'])){
       "mensaje"   => "" 
     ];
 
-    $data = $usuario->iniciarSesion($_GET['nombreusuario']);
-    $claveI = $_GET['password'];
+    $data = $usuario->iniciarSesion($_POST['nombreusuario']);
+    $claveI = $_POST['password'];
 
     if($data){
 
