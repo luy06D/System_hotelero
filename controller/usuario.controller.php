@@ -1,51 +1,52 @@
+
 <?php
+session_start();
 
 require_once '../model/usuario.php';
 
-if(isset($_POST['operacion'])){
+if(isset($_GET['operacion'])){
 
-  //Instancia de la clase usuario
   $usuario = new Usuario();
 
-  if($_POST['operacion'] == 'destruir'){
-    session_destroy(); //Elimina la sesión
-    session_unset(); //unset libera recursos
-    header('Location:../index.html');
+  if($_GET['operacion'] == 'destroy'){
+      session_destroy();
+      session_unset();
+      header('Location:../index.php');
+
   }
 
+  if($_GET['operacion'] == 'iniciarSesion'){
 
-  if($_POST['operacion'] == 'iniciarSesion'){
-    
     $acceso = [
-      "login"     => false,
+      "login"   => false,
       "apellidos" => "",
-      "nombres"   => "",
-      "mensaje"   => "" 
+      "nombres" => "",
+      "mensaje"  => ""
     ];
 
-    $data = $usuario->iniciarSesion($_POST['nombreusuario']);
-    $claveI = $_POST['password'];
+    $data = $usuario->iniciarSesion($_GET['email']);
+    $claveIngresada = $_GET['password'];
 
     if($data){
 
-      if(password_verify($claveI, $data['claveacceso'])){
+      if(password_verify($claveIngresada, $data['claveacceso'])){
 
-        $acceso["login"] = true;
-        $acceso["apellidos"] = $data["apellidos"];
-        $acceso["nombres"] = $data["nombres"];
-
+          $acceso["login"] = true;
+          $acceso["apellidos"] = $data["apellidos"];
+          $acceso["nombres"] = $data["nombres"];
       }else{
-        $acceso["mensaje"] = "Contraseña incorrecta";
+        $acceso["mensaje"] = "Error en la contraseña";
       }
-
     }else{
-      $acceso["mensaje"] = "El usuario ingresado no existe";
+      $acceso["mensaje"] = "Usuario no encontrado";
     }
 
+    $_SESSION['segurity'] = $acceso;
+
     echo json_encode($acceso);
-
-
   }
-}
 
+
+
+}
 ?>

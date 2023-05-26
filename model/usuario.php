@@ -3,29 +3,31 @@ require_once 'conexion.php';
 
 class Usuario extends Conexion{
 
-  //Objeto
-  private $acceso;
+    //Objeto
+    private $acceso;
 
-  public function __CONSTRUCT(){
-    $this->acceso = parent::getConexion();
-  }
-
-  public function iniciarSesion($nombreusuario = "" ){
-    //Manejador de excepciones try - catch
-    try{
-      $query = $this->acceso->prepare("CALL spu_usuarios_login(?)");
-      $query->execute(array($nombreusuario));
-
-      return $query->fetch(PDO::FETCH_ASSOC);
-
+    // Método Constructor 
+    public function __CONSTRUCT(){
+        $this->acceso = parent::getConexion();
     }
-    catch(Exception $e){
-      die($e->getMessage());
 
+    public function iniciarSesion($email = ""){
+        //Instrución try-catch
+        try{
+            $consulta = $this->acceso->prepare("CALL spu_usuarios_iniciarS(?)");
+            $consulta->execute(array($email));
+
+            return $consulta->fetch(PDO::FETCH_ASSOC);
+
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+
+        }
     }
-  }
 
 
 }
+
 
 ?>

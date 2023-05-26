@@ -2,10 +2,13 @@
 
 class Conexion{
 
+  protected $pdo;
+
+
   private function Conectar(){
     try{
-      $pdo = new PDO("mysql:host=localhost;port=3306;dbname=systemHotelero;charset=UTF8","root","");
-      return $pdo;
+      $conexion = new PDO("mysql:host=localhost;port=3306; dbname=sistema_hotelero; charset=utf8","root","");
+      return $conexion;
     }
     catch(Exception $e){
       die($e->getMessage());
@@ -15,8 +18,10 @@ class Conexion{
   //Todo el modelo utilizará este método...
   public function getConexion(){
     try{
+
       $pdo = $this->Conectar();
       $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
       return $pdo;
     }
     catch(Exception $e){
@@ -25,3 +30,5 @@ class Conexion{
   }
 
 }
+
+?>
