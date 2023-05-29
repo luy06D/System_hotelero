@@ -71,10 +71,10 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Reservaciones
                             </a>
-                            <a class="nav-link" href="tables.html">
-                                <div class="sb-nav-link-icon"><i class="bi bi-graph-up"></i></div>
-                                Graficos
-                            </a>                          
+                            <a class="nav-link" href="./habitaciones.php">
+                                <div class="sb-nav-link-icon"><i class="bi bi-door-open"></i></div>
+                                Habitaciones
+                            </a>                                                     
                             <div class="sb-sidenav-menu-heading">Complementos</div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="bi bi-people-fill"></i></div>
@@ -86,10 +86,10 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                                     <a class="nav-link" href="layout-static.html">Nuevo Usuario</a>
                                     <a class="nav-link" href="layout-sidenav-light.html">Nuevo Empleado</a>
                                 </nav>
-                            </div>
+                            </div>                            
                             <a class="nav-link" href="tables.html">
-                                <div class="sb-nav-link-icon"><i class="bi bi-door-open"></i></div>
-                                Habitaciones
+                                <div class="sb-nav-link-icon"><i class="bi bi-graph-up"></i></div>
+                                Graficos
                             </a>
                                                        
                             <a class="nav-link" href="../controller/usuario.controller.php?operacion=destroy">
@@ -107,6 +107,23 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
             </div>
             <div id="layoutSidenav_content">
                 <!-- CONTENIDO -->
+                <div class="container mt-3">
+                <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                    <img src="../img/habitacionC.jpg" class="img-fluid rounded-start" alt="..." style="height: 200px; width:250px">
+                    </div>
+                    <div class="col-md-8">
+                    <div class="card-body text-center">
+                      <!-- DATOS ASINCRONOS  -->
+              
+                    </div>
+                    </div>
+                </div>
+                </div>
+                </div>
+               
+
              
             </div>
         </div>

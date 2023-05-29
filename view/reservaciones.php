@@ -67,14 +67,14 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                                 <div class="sb-nav-link-icon"><i class="bi bi-house-fill"></i></div>
                                 Inicio
                             </a>
-                            <a class="nav-link" href="charts.html">
+                            <a class="nav-link" href="./reservaciones.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Reservaciones
                             </a>
-                            <a class="nav-link" href="tables.html">
-                                <div class="sb-nav-link-icon"><i class="bi bi-graph-up"></i></div>
-                                Graficos
-                            </a>                          
+                            <a class="nav-link" href="./habitaciones.php">
+                                <div class="sb-nav-link-icon"><i class="bi bi-door-open"></i></div>
+                                Habitaciones
+                            </a>                                                   
                             <div class="sb-sidenav-menu-heading">Complementos</div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="bi bi-people-fill"></i></div>
@@ -86,12 +86,11 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                                     <a class="nav-link" href="layout-static.html">Nuevo Usuario</a>
                                     <a class="nav-link" href="layout-sidenav-light.html">Nuevo Empleado</a>
                                 </nav>
-                            </div>
+                            </div>                          
                             <a class="nav-link" href="tables.html">
-                                <div class="sb-nav-link-icon"><i class="bi bi-door-open"></i></div>
-                                Habitaciones
-                            </a>
-                                                       
+                                <div class="sb-nav-link-icon"><i class="bi bi-graph-up"></i></div>
+                                Graficos
+                            </a>                                                         
                             <a class="nav-link" href="../controller/usuario.controller.php?operacion=destroy">
                                 <div class="sb-nav-link-icon"><i class="bi bi-box-arrow-in-left"></i></div>
                                 Cerrar sesion
