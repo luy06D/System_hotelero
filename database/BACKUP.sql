@@ -150,7 +150,7 @@ CREATE TABLE `reservaciones` (
   CONSTRAINT `fk_res_ide` FOREIGN KEY (`idempleado`) REFERENCES `empleados` (`idempleado`),
   CONSTRAINT `fk_res_idu` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`),
   CONSTRAINT `ck_res_tco` CHECK (`tipocomprobante` in ('F','B'))
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `reservaciones` */
 
@@ -163,7 +163,8 @@ insert  into `reservaciones`(`idreservacion`,`idempleado`,`idusuario`,`idhabitac
 (6,3,1,2,1,'2023-05-29 07:57:35','2023-06-01','2023-06-10','B','2023-05-29 07:57:35'),
 (7,3,1,2,1,'2023-05-29 08:23:18','2023-06-01','2023-06-10','B','2023-05-29 08:23:18'),
 (8,2,1,2,1,'2023-05-29 08:27:58','2023-06-08','2023-06-10','B','2023-05-29 08:27:58'),
-(9,2,1,2,2,'2023-05-29 08:28:57','2023-05-30','2023-06-06','B','2023-05-29 08:28:57');
+(9,2,1,2,2,'2023-05-29 08:28:57','2023-05-30','2023-06-06','B','2023-05-29 08:28:57'),
+(10,2,1,1,1,'2023-05-29 14:23:57','2023-05-30','2023-06-03','B','2023-05-29 14:23:57');
 
 /*Table structure for table `tipohabitaciones` */
 
