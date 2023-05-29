@@ -108,7 +108,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
             <div id="layoutSidenav_content">
                 <!-- CONTENIDO -->
                 <div class="container mt-3">
-                <div class="card mb-3" style="max-width: 540px;">
+                <div class="card mb-3" style="max-width:540px;">
                 <div class="row g-0">
                     <div class="col-md-4">
                     <img src="../img/habitacionC.jpg" class="img-fluid rounded-start" alt="..." style="height: 200px; width:250px">
@@ -122,9 +122,6 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                 </div>
                 </div>
                 </div>
-               
-
-             
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -142,7 +139,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
 
         <!-- <script>
 
-          document.addEventListener("DOMContentLoaded", () =>{
+          document.addEventListener("DOMContentLoaded", () =>{        -
 
 
 

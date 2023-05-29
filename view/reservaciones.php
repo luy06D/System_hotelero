@@ -291,6 +291,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                 mostrarUsuario();
                 mostrarHabitacion();
 
+
                 btnRegistrar.addEventListener("click", registrarReservacion);
                 
             });

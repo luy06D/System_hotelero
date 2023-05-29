@@ -261,6 +261,20 @@ END $$
 
 CALL spu_reservaciones_registrar(3,1,2,1,'2023-06-01','2023-06-10','B');
 
+-- MOSTRAR DATOS DE HABITACION
+
+DELIMITER $$
+CREATE PROCEDURE spu_habitaciones_data()
+BEGIN
+	SELECT 	HA.numhabitacion,
+		TH.tipo
+	FROM habitaciones HA
+	INNER JOIN tipohabitaciones TH ON TH.idtipohabitacion = HA.idtipohabitacion;
+END $$
+
+CALL spu_habitaciones_data();
+
+
 
 
 

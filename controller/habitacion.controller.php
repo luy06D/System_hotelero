@@ -4,6 +4,7 @@ require_once '../model/reservacion.php';
 
 if(isset($_POST['operacion'])){
 
+    //No encuentra la clase xdxd
     $habitacion = new Habitaciones();
 
     if($_POST['operacion'] == 'habitacionGet'){

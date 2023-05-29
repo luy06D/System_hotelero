@@ -9,7 +9,7 @@ class Habitaciones extends Conexion{
     public function __CONSTRUCT(){
         $this->conexion = parent::getConexion();
     }
-
+    //Método para mostrar habitaciones
     public function habitacionesGet(){
         try{
             $query = $this->conexion->prepare("CALL spu_habitaciones_data()");
