@@ -83,8 +83,8 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="layout-static.html">Nuevo Usuario</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Nuevo Empleado</a>
+                                    <a class="nav-link" href="./usuarios.php">Nuevo Usuario</a>
+                                    <a class="nav-link" href="">Nuevo Empleado</a>
                                 </nav>
                             </div>                            
                             <a class="nav-link" href="tables.html">
@@ -107,23 +107,16 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
             </div>
             <div id="layoutSidenav_content">
                 <!-- CONTENIDO -->
-                <div class="container mt-3">
-                <div class="card mb-3" style="max-width:540px;">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                    <img src="../img/habitacionC.jpg" class="img-fluid rounded-start" alt="..." style="height: 200px; width:250px">
-                    </div>
-                    <div class="col-md-8">
-                    <div class="card-body text-center">
-                      <!-- DATOS ASINCRONOS  -->
-              
-                    </div>
+
+                <div class="container mt-3" id="cardH">
+                    <div class="row">
+                        <!-- DATOS ASINCRONOS -->
                     </div>
                 </div>
-                </div>
-                </div>
+          
             </div>
         </div>
+       
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="../js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -137,55 +130,43 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
   
 
-        <!-- <script>
+        <script>
 
-          document.addEventListener("DOMContentLoaded", () =>{        -
+          document.addEventListener("DOMContentLoaded", () =>{        
+            const cardH = document.querySelector("#cardH");
+            const cuerpoCard = cardH.querySelector("div");      
 
-
-
-            const table_reservaciones = document.querySelector("#table_reservaciones");
-            const cuerpoTabla = table_reservaciones.querySelector("tbody");
-
-            function getReservaciones(){
+            function getHabitaciones(){
               const data = new URLSearchParams();
-              data.append("operacion","reservacionesGet");
+              data.append("operacion","habitacionGet");
 
-              fetch("../controller/reservacion.controller.php", {
+              fetch("../controller/habitacion.controller.php", {
                 method: 'POST',
                 body: data
-              })
+              })             
               .then(response => response.json())
-              .then(datos => {
+              .then(datos => {                
+                cuerpoCard.innerHTML = ``
                 datos.forEach(element => {
                   let row = `
-                    <tr>
-                      <td>${element.idreservacion}</td>
-                      <td>${element.numcuarto}</td>
-                      <td>${element.fechaentrada}</td>
-                      <td>${element.fechasalida}</td>
-                      <td>${element.numhabitacion}</td>
-                      <td>${element.piso}</td>
-                      <td>${element.capacidad}</td>
-                      <td>${element.precio}</td>
-                      <td>
-                        <a href='#' class=' eliminar btn btn-danger btn-sm ' data-iddemo='${element.idreservacion}' >Eliminar</a>
-                        <a href='#' class=' editar btn btn-info btn-sm ' data-iddemo='${element.idreservacion}' >Editar</a>
-                      </td>
-                    </tr>
+                  <div class="col-12 col-md-3 col-lg-3 mb-3">
+                    <div class="card shadow">
+                        <div class="card-body">
+                        <h5 class="card-title">Nro° ${element.numhabitacion}</h5>
+                        <p class="card-text">${element.tipo}</p>                        
+                        </div>
+                    </div>
+                  </div>                                                                                                    
                     `;
-
-                    cuerpoTabla.innerHTML += row;
-
-                  
+                    cuerpoCard.innerHTML += row;                
                 });
               });
               
             }
 
-            getReservaciones();
-
+            getHabitaciones();
           });
 
-        </script> -->
+        </script>
     </body>
 </html>

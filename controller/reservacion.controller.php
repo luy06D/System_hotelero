@@ -20,8 +20,7 @@ if(isset($_POST['operacion'])){
                     <td>{$registro['numhabitacion']}</td>
                     <td>{$registro['piso']}</td>
                     <td>{$registro['capacidad']}</td>
-                    <td>{$registro['precio']}</td>
-                   
+                    <td>{$registro['precio']}</td> 
                 </tr>          
                 ";
             }

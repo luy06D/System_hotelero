@@ -83,8 +83,8 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="layout-static.html">Nuevo Usuario</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Nuevo Empleado</a>
+                                    <a class="nav-link" href="./usuarios.php">Nuevo Usuario</a>
+                                    <a class="nav-link" href="">Nuevo Empleado</a>
                                 </nav>
                             </div>                          
                             <a class="nav-link" href="tables.html">
@@ -183,7 +183,8 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
         <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
-  
+          <!-- CDN sweetAlert2 -->
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
         <script>

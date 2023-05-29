@@ -35,10 +35,10 @@ if(isset($_GET['operacion'])){
           $acceso["apellidos"] = $data["apellidos"];
           $acceso["nombres"] = $data["nombres"];
       }else{
-        $acceso["mensaje"] = "Error en la contraseña";
+        $acceso["mensaje"] = "Contraseña";
       }
     }else{
-      $acceso["mensaje"] = "Usuario no encontrado";
+      $acceso["mensaje"] = "Usuario";
     }
 
     $_SESSION['segurity'] = $acceso;

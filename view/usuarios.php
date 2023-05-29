@@ -83,8 +83,8 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="./usuarios.php">Nuevo Usuario</a>
-                                    <a class="nav-link" href="">Nuevo Empleado</a>
+                                    <a class="nav-link" href="layout-static.html">Nuevo Usuario</a>
+                                    <a class="nav-link" href="layout-sidenav-light.html">Nuevo Empleado</a>
                                 </nav>
                             </div>                                                       
                             <a class="nav-link" href="tables.html">
@@ -105,38 +105,68 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                 </nav>
             </div>
             <div id="layoutSidenav_content">
-                <!-- Tabla -->
-                <div class=" tableR mt-5">
-                <table id="table_reservaciones" class="table table-bordered border-secondary table-sm display responsive nowrap"  width="100%" >
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>N° de cuartos</th>
-                        <th>Fecha Entrada</th>
-                        <th>Fecha Salida</th>
-                        <th>N° habitacion</th>
-                        <th>Piso</th>
-                        <th>Capacidad</th>
-                        <th>Precio</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                <!-- CONTENIDO -->
+                <div class="container">
+                    <div class="row mt-3">
 
-                    </tbody>
-                  </table>
-                </div>
-                <footer class="py-4  mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; 1996-2023 Larcomar.com . Todos los derechos reservados</div>
-                            <div >
-                                <a href="#" style="text-decoration: none; color:#C2C2C2 ;">Privacy Policy</a>
-                                &middot;
-                                <a href="#" style="text-decoration: none; color:#C2C2C2 ;" >Terms &amp; Conditions</a>
-                            </div>
+                        <div class="col-md-12 col-lg-12">
+                            <form action="" id="form-reservaciones" autocomplete="off">
+                                <div class="card">
+                                    <div class="card-header">
+                                        Registro de usuarios
+                                    </div>
+                                    <div class="card-body">                                        
+                                        <div class="mb-3">
+                                            <label for="persona" class="form-label">Persona</label>
+                                            <select  id="persona" class="form-select">
+                                                <option value="">Selección</option>
+                                            </select>
+                                        </div>                                       
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="number" id="email" class="form-control form-control-sm">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="nombreusuario" class="form-label">Nombre de usuario</label>
+                                            <input type="date" id="nombreusuario" class="form-control form-control-sm">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="contraseña" class="form-label">Contraseña</label>
+                                            <input type="date" id="contraseña" class="form-control form-control-sm">
+                                        </div>                                        
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-sm btn-success" id="guardar" type="button">Registrar</button>
+                                            <button class="btn btn-sm btn-secondary" type="reset">Reiniciar</button>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+
                         </div>
                     </div>
-                </footer>
+
+                
+                
+                  <!-- TABLA USUARIOS -->
+                  <div class=" tableR ">
+                  <table id="table_usuarios" class="table table-bordered border-secondary table-sm display responsive nowrap"  width="100%" >
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Nombres</th>
+                          <th>Apellidos</th>
+                          <th>Email</th>
+                          <th>Nombre de usuario</th>                      
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                      </tbody>
+                    </table>
+                  </div>
+                  </div>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -150,37 +180,38 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
         <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
-  
+
         <script>
           $(document).ready(function (){
 
-            function get_reservaciones(){
+            function get_usuarios(){
               $.ajax({
-                url:'../controller/reservacion.controller.php',
+                url: '../controller/usuarionew.controller.php',
                 type: 'POST',
-                data: {'operacion' : 'reservacionesGet'},
+                data: {'operacion' : 'usersGet'},
                 success: function (result){
+                  var dt = $("#table-usuarios").DataTable();
+                  dt.destroy();
 
-                  var tablaDT = $("#table_reservaciones").DataTable();
-                  tablaDT.destroy();
+                  $("#table_usuarios tbody").html(result);
 
-                  $("#table_reservaciones tbody").html(result);
-
-                  $("#table_reservaciones").DataTable({
+                  $("#table_usuarios").DataTable({
                     dom: 'Bfrtip',
-                    responsive:true,
-                    language: {
-                                url: '../js/Spanish.json'
-                            }
+                    responsive: true,
+                    languaje: {
+                       url:'../js/Spanish.json'
+                    }
                   });
                 }
               });
             }
 
-           
-            get_reservaciones();
-
+            get_usuarios();
           });
         </script>
+
+      
+
+
     </body>
 </html>

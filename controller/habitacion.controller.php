@@ -1,28 +1,20 @@
 <?php
 
-require_once '../model/reservacion.php';
+require_once '../model/habitacion.php';
 
 if(isset($_POST['operacion'])){
 
-    //No encuentra la clase xdxd
     $habitacion = new Habitaciones();
 
     if($_POST['operacion'] == 'habitacionGet'){
-
-        $data = $habitacion->habitacionesGet();
-
-        if($data){
-            foreach($data as $registro){
-                echo "
-                <div>
-                    <h1>{$registro['numhabitacion']}</h1>
-                    <p>{$registro['tipo']}</p>
-                </div>
-            
-                ";
-            }
-            
+        $dataObtenida = $habitacion->habitacionesGet();
+        if($dataObtenida){
+            echo json_encode($dataObtenida);
         }
+
+    
+
+
       
     }
 

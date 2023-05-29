@@ -274,6 +274,34 @@ END $$
 
 CALL spu_habitaciones_data();
 
+--  LISTAR USUARIO
+
+DELIMITER $$ 
+CREATE PROCEDURE spu_listar_usuarios()
+BEGIN
+	SELECT 	US.idusuario,
+			PE.nombres, PE.apellidos,
+			US.email, US.nombreusuario
+			
+	FROM usuarios US
+	INNER JOIN personas PE ON PE.idpersona = US.idpersona;
+END $$
+
+CALL spu_listar_usuarios();
+
+-- REGISTRAR UN USUARIO
+
+DELIMITER $$ 
+CREATE PROCEDURE spu_registrar_usuarios
+(
+IN _idpersona 		INT,
+IN _email 			VARCHAR(50),
+IN _nombreusuario 	VARCHAR(50),
+IN _claveacceso 	VARCHAR(100),	
+)
+BEGIN
+	
+END $$
 
 
 

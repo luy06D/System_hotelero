@@ -1,5 +1,5 @@
 /*
-SQLyog Community v12.5.1 (64 bit)
+SQLyog Ultimate v12.5.1 (64 bit)
 MySQL - 10.4.24-MariaDB : Database - sistema_hotelero
 *********************************************************************
 */
@@ -150,19 +150,20 @@ CREATE TABLE `reservaciones` (
   CONSTRAINT `fk_res_ide` FOREIGN KEY (`idempleado`) REFERENCES `empleados` (`idempleado`),
   CONSTRAINT `fk_res_idu` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`),
   CONSTRAINT `ck_res_tco` CHECK (`tipocomprobante` in ('F','B'))
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `reservaciones` */
 
 insert  into `reservaciones`(`idreservacion`,`idempleado`,`idusuario`,`idhabitacion`,`numcuarto`,`fecharegistro`,`fechaentrada`,`fechasalida`,`tipocomprobante`,`fechacomprobante`) values 
-(1,1,1,4,1,'2023-05-27 19:34:41','2023-05-25','2023-05-30','B','2023-05-27 19:34:41'),
-(2,1,1,2,3,'2023-05-27 19:34:41','2023-06-25','2023-06-30','B','2023-05-27 19:34:41'),
-(3,3,1,1,1,'2023-05-27 19:34:41','2023-05-25','2023-05-27','B','2023-05-27 19:34:41'),
-(4,1,1,1,3,'2023-05-27 19:34:41','2023-05-25','2023-06-01','B','2023-05-27 19:34:41'),
-(5,3,1,3,2,'2023-05-27 19:34:41','2023-05-27','2023-06-07','B','2023-05-27 19:34:41'),
-(6,3,1,2,1,'2023-05-27 19:35:21','2023-06-01','2023-06-10','B','2023-05-27 19:35:21'),
-(17,2,1,1,1,'2023-05-28 18:47:59','2023-06-03','2023-06-07','B','2023-05-28 18:47:59'),
-(18,2,1,1,1,'2023-05-28 18:57:00','2023-05-29','2023-06-02','B','2023-05-28 18:57:00');
+(1,1,1,4,1,'2023-05-29 07:56:54','2023-05-25','2023-05-30','B','2023-05-29 07:56:54'),
+(2,1,1,2,3,'2023-05-29 07:56:54','2023-06-25','2023-06-30','B','2023-05-29 07:56:54'),
+(3,3,1,1,1,'2023-05-29 07:56:54','2023-05-25','2023-05-27','B','2023-05-29 07:56:54'),
+(4,1,1,1,3,'2023-05-29 07:56:54','2023-05-25','2023-06-01','B','2023-05-29 07:56:54'),
+(5,3,1,3,2,'2023-05-29 07:56:54','2023-05-27','2023-06-07','B','2023-05-29 07:56:54'),
+(6,3,1,2,1,'2023-05-29 07:57:35','2023-06-01','2023-06-10','B','2023-05-29 07:57:35'),
+(7,3,1,2,1,'2023-05-29 08:23:18','2023-06-01','2023-06-10','B','2023-05-29 08:23:18'),
+(8,2,1,2,1,'2023-05-29 08:27:58','2023-06-08','2023-06-10','B','2023-05-29 08:27:58'),
+(9,2,1,2,2,'2023-05-29 08:28:57','2023-05-30','2023-06-06','B','2023-05-29 08:28:57');
 
 /*Table structure for table `tipohabitaciones` */
 
@@ -206,7 +207,7 @@ CREATE TABLE `usuarios` (
 /*Data for the table `usuarios` */
 
 insert  into `usuarios`(`idusuario`,`idpersona`,`email`,`nombreusuario`,`claveacceso`,`fecharegistro`,`estado`) values 
-(1,1,'cusiluis@gmail.com','Luy06','$2y$10$5r8ckx/oVIYMD.NiwlI2huzXQoI2eUhXfnszinHGpJB03MXBTLulO','2023-05-27 19:33:49','1');
+(1,1,'cusiluis@gmail.com','Luy06','$2y$10$5r8ckx/oVIYMD.NiwlI2huzXQoI2eUhXfnszinHGpJB03MXBTLulO','2023-05-29 07:55:50','1');
 
 /* Procedure structure for procedure `spu_habitaciones_data` */
 
@@ -215,11 +216,28 @@ insert  into `usuarios`(`idusuario`,`idpersona`,`email`,`nombreusuario`,`claveac
 DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_habitaciones_data`()
-begin
-	select 	HA.numhabitacion,
+BEGIN
+	SELECT 	HA.numhabitacion,
 		TH.tipo
-	from habitaciones HA
-	inner join tipohabitaciones TH on TH.idtipohabitacion = HA.idtipohabitacion;
+	FROM habitaciones HA
+	INNER JOIN tipohabitaciones TH ON TH.idtipohabitacion = HA.idtipohabitacion;
+END */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `spu_listar_usuarios` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `spu_listar_usuarios` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_listar_usuarios`()
+begin
+	select 	US.idusuario,
+			PE.nombres, PE.apellidos,
+			US.email, US.nombreusuario
+			
+	from usuarios US
+	INNER join personas PE on PE.idpersona = US.idpersona;
 end */$$
 DELIMITER ;
 
@@ -230,13 +248,13 @@ DELIMITER ;
 DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_recuperar_empleados`()
-begin 
-	select 	EM.idempleado,
+BEGIN 
+	SELECT 	EM.idempleado,
 		PER.nombres
-	from empleados EM
-	inner join personas PER on PER.idpersona = EM.idpersona;
+	FROM empleados EM
+	INNER JOIN personas PER ON PER.idpersona = EM.idpersona;
 	
-end */$$
+END */$$
 DELIMITER ;
 
 /* Procedure structure for procedure `spu_recuperar_habitaciones` */
@@ -247,10 +265,10 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_recuperar_habitaciones`()
 BEGIN 
-	select 	HA.idhabitacion, 
+	SELECT 	HA.idhabitacion, 
 		TH.tipo
-	from habitaciones HA
-	inner join tipohabitaciones TH on TH.idtipohabitacion = HA.idtipohabitacion;
+	FROM habitaciones HA
+	INNER JOIN tipohabitaciones TH ON TH.idtipohabitacion = HA.idtipohabitacion;
 	
 END */$$
 DELIMITER ;
@@ -263,8 +281,8 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_recuperar_usuarios`()
 BEGIN 
-	select idusuario, nombreusuario
-	from usuarios;
+	SELECT idusuario, nombreusuario
+	FROM usuarios;
 	
 END */$$
 DELIMITER ;
