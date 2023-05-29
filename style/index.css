@@ -1,9 +1,15 @@
 
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
+
+
+
+
 .title{
   letter-spacing: 1px;
   text-align: center;
   color: #03643a;
+  font-family: 'Lobster', cursive;
 
 }
   .css-button-sliding-to-left--green {

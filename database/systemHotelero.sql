@@ -29,6 +29,7 @@ CREATE TABLE usuarios
 	idusuario 	INT AUTO_INCREMENT PRIMARY KEY,
 	idpersona	INT 		NOT NULL,
 	email		VARCHAR(50)	NOT NULL,
+	nombreusuario	VARCHAR(50)	NOT NULL,
 	claveacceso	VARCHAR(100)	NOT NULL,
 	fecharegistro 	DATETIME 	NOT NULL DEFAULT NOW(),
 	estado 		CHAR(1)		NOT NULL DEFAULT '1',
@@ -37,8 +38,8 @@ CREATE TABLE usuarios
 )
 ENGINE = INNODB;
 
-INSERT INTO usuarios (idpersona, email, claveacceso) VALUES
-			(1,'cusiluis@gmail.com','12345');
+INSERT INTO usuarios (idpersona, email, nombreusuario, claveacceso) VALUES
+			(1,'cusiluis@gmail.com','Luy06','12345');
 			
 UPDATE usuarios SET claveacceso = '$2y$10$5r8ckx/oVIYMD.NiwlI2huzXQoI2eUhXfnszinHGpJB03MXBTLulO'
 WHERE idusuario = 1;
@@ -130,8 +131,8 @@ CREATE TABLE reservaciones
 	idhabitacion		INT 		NOT NULL,
 	numcuarto		TINYINT 	NOT NULL,
 	fecharegistro		DATETIME 	NOT NULL DEFAULT NOW(),
-	fechaentrada		DATETIME 	NOT NULL,
-	fechasalida		DATETIME 	NOT NULL,
+	fechaentrada		DATE	 	NOT NULL,
+	fechasalida		DATE 		NOT NULL,
 	tipocomprobante		CHAR(1)		NOT NULL,  -- F(factura) , B(boleta)   
 	fechacomprobante	DATETIME 	NOT NULL DEFAULT NOW(),
 	CONSTRAINT fk_res_ide FOREIGN KEY (idempleado) REFERENCES empleados (idempleado),
@@ -198,6 +199,71 @@ BEGIN
 END $$
 
 CALL spu_reservaciones_get();
+
+-- RECUPERAR EMPLEADOS
+DELIMITER $$
+CREATE PROCEDURE spu_recuperar_empleados()
+BEGIN 
+	SELECT 	EM.idempleado,
+		PER.nombres
+	FROM empleados EM
+	INNER JOIN personas PER ON PER.idpersona = EM.idpersona;
+	
+END $$
+
+CALL spu_recuperar_empleados();
+
+-- RECUPERAR USUARIOS
+
+DELIMITER $$
+CREATE PROCEDURE spu_recuperar_usuarios()
+BEGIN 
+	SELECT idusuario, nombreusuario
+	FROM usuarios;
+	
+END $$
+
+CALL spu_recuperar_usuarios();
+
+-- RECUPERAR HABITACIONES
+
+DELIMITER $$
+CREATE PROCEDURE spu_recuperar_habitaciones()
+BEGIN 
+	SELECT 	HA.idhabitacion, 
+		TH.tipo
+	FROM habitaciones HA
+	INNER JOIN tipohabitaciones TH ON TH.idtipohabitacion = HA.idtipohabitacion;
+	
+END $$
+
+CALL spu_recuperar_habitaciones();
+
+-- REGISTRAR RESERVACIONES
+
+DELIMITER $$
+CREATE PROCEDURE spu_reservaciones_registrar
+(
+IN _idempleado		INT,
+IN _idusuario 		INT,
+IN _idhabitacion  	INT,
+IN _numcuarto		TINYINT,
+IN _fechaentrada	DATE,
+IN _fechasalida		DATE,
+IN _tipocomprobante	CHAR(1)
+)
+BEGIN
+INSERT INTO reservaciones (idempleado, idusuario, idhabitacion, numcuarto, fechaentrada, 
+				fechasalida, tipocomprobante) VALUES
+		(_idempleado, _idusuario, _idhabitacion, _numcuarto, _fechaentrada, _fechasalida, _tipocomprobante);
+		
+END $$
+
+CALL spu_reservaciones_registrar(3,1,2,1,'2023-06-01','2023-06-10','B');
+
+
+
+
 
 
 

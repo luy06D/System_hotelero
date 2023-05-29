@@ -87,7 +87,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                                     <a class="nav-link" href="layout-sidenav-light.html">Nuevo Empleado</a>
                                 </nav>
                             </div>
-                            <a class="nav-link" href="./habitaciones.php">
+                            <a class="nav-link" href="tables.html">
                                 <div class="sb-nav-link-icon"><i class="bi bi-door-open"></i></div>
                                 Habitaciones
                             </a>
@@ -106,38 +106,8 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                 </nav>
             </div>
             <div id="layoutSidenav_content">
-                <!-- Tabla -->
-                <div class=" tableR mt-5">
-                <table id="table_reservaciones" class="table table-bordered border-secondary table-sm display responsive nowrap"  width="100%" >
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>N° de cuartos</th>
-                        <th>Fecha Entrada</th>
-                        <th>Fecha Salida</th>
-                        <th>N° habitacion</th>
-                        <th>Piso</th>
-                        <th>Capacidad</th>
-                        <th>Precio</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                  </table>
-                </div>
-                <footer class="py-4  mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; 1996-2023 Larcomar.com . Todos los derechos reservados</div>
-                            <div >
-                                <a href="#" style="text-decoration: none; color:#C2C2C2 ;">Privacy Policy</a>
-                                &middot;
-                                <a href="#" style="text-decoration: none; color:#C2C2C2 ;" >Terms &amp; Conditions</a>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
+                <!-- CONTENIDO -->
+             
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -203,38 +173,5 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
           });
 
         </script> -->
-
-
-        <script>
-          $(document).ready(function (){
-
-            function get_reservaciones(){
-              $.ajax({
-                url:'../controller/reservacion.controller.php',
-                type: 'POST',
-                data: {'operacion' : 'reservacionesGet'},
-                success: function (result){
-
-                  var tablaDT = $("#table_reservaciones").DataTable();
-                  tablaDT.destroy();
-
-                  $("#table_reservaciones tbody").html(result);
-
-                  $("#table_reservaciones").DataTable({
-                    dom: 'Bfrtip',
-                    responsive:true,
-                    language: {
-                                url: '../js/Spanish.json'
-                            }
-                  });
-                }
-              });
-            }
-
-           
-            get_reservaciones();
-
-          });
-        </script>
     </body>
 </html>
