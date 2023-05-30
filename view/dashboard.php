@@ -111,8 +111,8 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th>N° de cuartos</th>
-                        <th>Fecha Entrada</th>
+                        <th>Cliente</th>
+                        <th>Fecha entrada</th>
                         <th>Fecha Salida</th>
                         <th>N° habitacion</th>
                         <th>Piso</th>

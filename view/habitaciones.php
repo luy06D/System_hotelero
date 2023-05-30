@@ -20,6 +20,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="../style/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="../style/inicio.css">
+        <link rel="stylesheet" href="../style/card.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
           <!-- Datatable for BS5 -->
@@ -36,8 +37,10 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                 <span class="h3  mb-0" style="color: #ffffff;">Larcomar</span>
             </div>
            
+           
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 mt-2" style="font-size: 20px;" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <label for="" class="px-1 ms-xl-3 mt-1 text-white">Usuario:</label>
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                 <div class="input-group">
@@ -150,10 +153,11 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                 datos.forEach(element => {
                   let row = `
                   <div class="col-12 col-md-3 col-lg-3 mb-3">
-                    <div class="card shadow">
+                    <div class="card shadow carD ">
                         <div class="card-body">
-                        <h5 class="card-title">Nro° ${element.numhabitacion}</h5>
-                        <p class="card-text">${element.tipo}</p>                        
+                        <h4 class="card-title">Nro° ${element.numhabitacion}</h4>
+                        <p class="card-text">Tipo: ${element.tipo}</p> 
+                        <p class="card-text cd">${element.estado}</p>                                         
                         </div>
                     </div>
                   </div>                                                                                                    

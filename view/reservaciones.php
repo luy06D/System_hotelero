@@ -112,10 +112,14 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                         <div class="col-md-12 col-lg-12">
                             <form action="" id="form-reservaciones" autocomplete="off">
                                 <div class="card">
-                                    <div class="card-header">
+                                    <div class="card-header bg-success text-white text-center" style="font-size: 20px ;">
                                         Registro de reservaciones
                                     </div>
                                     <div class="card-body">
+                                         <div class="input-group mb-3">
+                                            <input type="text" class="form-control" placeholder="Clientes" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#buscar-cliente" type="button" id="button-addon2"><i class="bi bi-search"></i></button>
+                                        </div>
                                         <div class="mb-3">
                                             <label for="idempleado" class="form-label">Empleado</label>
                                             <select  id="idempleado" class="form-select">
@@ -133,11 +137,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                                             <select  id="idhabitacion" class="form-select">
                                                 <option value="">Selección</option>
                                             </select>            
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="numcuarto" class="form-label">N° cuartos</label>
-                                            <input type="number" id="numcuarto" class="form-control form-control-sm">
-                                        </div>
+                                        </div>                                       
                                         <div class="mb-3">
                                             <label for="fechaentrada" class="form-label">Fecha de entrada</label>
                                             <input type="date" id="fechaentrada" class="form-control form-control-sm">
@@ -168,6 +168,50 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                     </div>
 
                 </div>
+           
+                <!-- Modal -->
+                <div class="modal fade" id="buscar-cliente" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel"><i class="bi bi-person-lines-fill"></i> Buscar clientes</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" id="tabDni" placeholder="Enter para buscar">
+                        <div class="container" id="lista">                    
+                                <!-- busqueda de personas -->
+                                <ul class="list-group mt-4">
+                                    <li class="list-group-item" id="idcliente"></li>
+                                    <li class="list-group-item" id="nombres"></li>
+                                </ul>                    
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>                        
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class=" tableR mt-5">
+                <table id="table_pagos" class="table table-bordered border-secondary table-sm display responsive nowrap"  width="100%" >
+                    <thead>
+                      <tr>
+                        <th>Cliente</th>
+                        <th>Fecha de pago</th>
+                        <th>Medio de pago</th>
+                        <th>Monto pagado</th>                    
+                      </tr>
+                    </thead>
+                    <tbody>
+                    
+                    </tbody>
+                  </table>
+                </div>
+
+
                 
               
             </div>
@@ -185,6 +229,8 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
           <!-- CDN sweetAlert2 -->
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="../js/dt-pagos.js"></script>
+        <script src="../js/buscar-cli.js"></script>
 
 
         <script>
@@ -195,6 +241,9 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                 const lsUsuario = document.querySelector("#idusuario");
                 const lsHabitacion = document.querySelector("#idhabitacion");
                 const btnRegistrar = document.querySelector("#guardar");
+                const listaB = document.querySelector("#lista");
+                const cuerpoLista = listaB.querySelector("ul");
+                const tapInput = document.querySelector("#tabDni")
 
                 //Métodos
                 function mostrarEmpleado(){
@@ -257,6 +306,29 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                     });
                 }
 
+                //CON ERRORES FALTA CORREGIR
+                // function buscarCliente(){
+                //     const parameter = new URLSearchParams();
+                //     parameter.append("operacion", "clientesBuscar");
+                //     parameter.append("dni" , document.querySelector("#tabDni").value);
+
+                //     fetch("../controller/reservacion.controller.php", {
+                //         method: 'POST',
+                //         body: parameter
+                //     })
+                //     .then(response => response.json())
+                //     .then(data => {
+                //         if(data){
+                //             document.querySelector("#idcliente");
+                //             document.querySelector("#nombres");
+                //         }
+                        
+                //     })
+                    
+                  
+
+                // }
+
                 function registrarReservacion(){
                     if(confirm("¿Está seguro de registrar?")){
                         const parameters = new URLSearchParams();
@@ -288,12 +360,15 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
 
 
 
+
                 mostrarEmpleado();
                 mostrarUsuario();
                 mostrarHabitacion();
 
 
                 btnRegistrar.addEventListener("click", registrarReservacion);
+             
+
                 
             });
   

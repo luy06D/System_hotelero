@@ -6,6 +6,10 @@ if(isset($_POST['operacion'])){
 
     $reservacion = new Reservaciones();
 
+    if($_POST['operacion'] == 'clientesBuscar'){
+         echo json_encode($reservacion->clientes_buscar($_POST['dni']));
+    }
+
     if($_POST['operacion'] == 'reservacionesGet'){
         $data = $reservacion->reservaciones_get();
 
@@ -14,7 +18,7 @@ if(isset($_POST['operacion'])){
                 echo "
                 <tr>
                     <td>{$registro['idreservacion']}</td>
-                    <td>{$registro['numcuarto']}</td>
+                    <td>{$registro['cliente']}</td>
                     <td>{$registro['fechaentrada']}</td>
                     <td>{$registro['fechasalida']}</td>
                     <td>{$registro['numhabitacion']}</td>
@@ -22,6 +26,22 @@ if(isset($_POST['operacion'])){
                     <td>{$registro['capacidad']}</td>
                     <td>{$registro['precio']}</td> 
                 </tr>          
+                ";
+            }
+        }
+    }
+
+    if($_POST['operacion'] == 'pagosGet'){
+        $data = $reservacion->pagos_get();
+        if($data){
+            foreach($data as $registro){
+                echo "
+                <tr>
+                <td>{$registro['cliente']}</td>
+                <td>{$registro['fechapago']}</td>
+                <td>{$registro['mediopago']}</td>
+                <td>{$registro['montoPagado']}</td>                
+            </tr> 
                 ";
             }
         }
@@ -54,6 +74,7 @@ if(isset($_POST['operacion'])){
         echo json_encode($reservacion->habitacion_get());
     }
 
+   
 
 
 

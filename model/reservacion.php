@@ -39,6 +39,11 @@ class Reservaciones extends Conexion{
         return $ht;
     }
 
+    public function pagos_get(){
+        $pagos = $this->recuperar_data("CALL spu_pagos_get()");
+        return $pagos;
+    }
+
 
     public function reservaciones_get(){
         try{
@@ -49,6 +54,18 @@ class Reservaciones extends Conexion{
         }
         catch(Exception $e){
             die($e->getMessage());
+        }
+    }
+
+    public function clientes_buscar($dni = ''){
+        try{
+            $query = $this->conexion->prepare("CALL spu_recuperar_clientes(?)");
+            $query->execute(array($dni));
+            return $query->fetch(PDO::FETCH_ASSOC);
+            
+        }catch(Exception $e){
+            die($e->getMessage());
+
         }
     }
 
