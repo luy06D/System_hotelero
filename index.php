@@ -16,7 +16,7 @@ if(isset($_SESSION['segurity']) && $_SESSION['segurity']['login']){
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Larcomar</title>
-  <link rel="stylesheet" href="./style/index.css">
+  <link rel="stylesheet" href="./style/login.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
@@ -37,14 +37,17 @@ if(isset($_SESSION['segurity']) && $_SESSION['segurity']['login']){
   
             <form style="width: 40rem; text-align: center; ">
   
-              <h2 class="fw-normal mb-3 pb-3 fw-bold title" >Bienvenido a Larcomar</h2>      
+              <h2 class="fw-normal mb-3 pb-3 fw-bold title" >Bienvenido a Larcomar</h2>  
+              <div class="col-12 col-md-12 col-lg-10">
                 <div class="form-floating mb-4">
-                  <input type="text" id="email" class="form-control form-control-lg"  placeholder="Ingrese su usuario"/>
+                  <input type="text" id="email" class="form-control form-control-sm"  placeholder="Ingrese su usuario"/>
                   <label class="form-label" for="email">Nombre Usuario</label>
                 </div>
+              </div>    
+               
   
               <div class="form-floating mb-3">
-                <input type="password" id="password" class="form-control form-control-lg" placeholder="Ingrese su contraseña"/>
+                <input type="password" id="password" class="form-control form-control-sm" placeholder="Ingrese su contraseña"/>
                 <label class="form-label" for="password">Contraseña</label>
               </div>
               
