@@ -57,11 +57,11 @@ class Reservaciones extends Conexion{
         }
     }
 
-    public function clientes_buscar($dni = ''){
+    public function clientes_buscar(){
         try{
-            $query = $this->conexion->prepare("CALL spu_recuperar_clientes(?)");
-            $query->execute(array($dni));
-            return $query->fetch(PDO::FETCH_ASSOC);
+            $query = $this->conexion->prepare("CALL spu_recuperar_clientes()");
+            $query->execute();
+            return $query->fetchAll(PDO::FETCH_ASSOC);
             
         }catch(Exception $e){
             die($e->getMessage());
@@ -77,16 +77,18 @@ class Reservaciones extends Conexion{
         ];
 
         try{
-            $query = $this->conexion->prepare("CALL spu_reservaciones_registrar(?,?,?,?,?,?,?)");
+            $query = $this->conexion->prepare("CALL spu_pagos_registrar (?,?,?,?,?,?,?,?)");
             $response["status"] = $query->execute(
                 array(
-                    $datos["idempleado"],
                     $datos["idusuario"],
                     $datos["idhabitacion"],
-                    $datos["numcuarto"],
+                    $datos["idcliente"],
+                    $datos["idempleado"],
                     $datos["fechaentrada"],
                     $datos["fechasalida"],
-                    $datos["tipocomprobante"]
+                    $datos["tipocomprobante"],
+                    $datos["mediopago"]
+                    
                 )
             );
         }

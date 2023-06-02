@@ -25,7 +25,9 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
           <!-- Datatable for BS5 -->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
-
+        <!-- estilos de select2   -->
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-success">
@@ -116,16 +118,17 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                                         Registro de reservaciones
                                     </div>
                                     <div class="card-body">
-                                         <div class="input-group mb-3">
-                                            <input type="text" class="form-control" placeholder="Clientes" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#buscar-cliente" type="button" id="button-addon2"><i class="bi bi-search"></i></button>
+                                        <div class="mb-3">                                    
+                                            <select  id="idcliente" class="js-example-responsive" style="width: 100%;" >
+                                                <option value=""></option>
+                                            </select>
                                         </div>
                                         <div class="mb-3">
                                             <label for="idempleado" class="form-label">Empleado</label>
                                             <select  id="idempleado" class="form-select">
                                                 <option value="">Selección</option>
                                             </select>
-                                        </div>
+                                        </div>                                       
                                         <div class="mb-3">
                                             <label for="idusuario" class="form-label">Usuario</label>
                                             <select  id="idusuario" class="form-select">
@@ -154,10 +157,21 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                                                 <option value="B">B</option>
                                             </select>                                                        
                                         </div>
+                                        <div>Datos del pago</div>
+                                        <hr>
+                                        <div class="mb-3">
+                                            <label for="mediopago" class="form-label">Medio de pago</label>
+                                            <select  id="mediopago" class="form-select">
+                                                <option value="">Seleccion</option>
+                                                <option value="Efectivo">Efectivo</option>
+                                                <option value="Tarjeta bancaria">Tarjeta bancaria</option>
+                                                <option value="Yape">Yape</option>
+                                                <option value="Paypal">Paypal</option>
+                                            </select>                                                        
+                                        </div>
                                         <div class="d-grid gap-2">
                                             <button class="btn btn-sm btn-success" id="guardar" type="button">Registrar</button>
-                                            <button class="btn btn-sm btn-secondary" type="reset">Reiniciar</button>
-                                            
+                                            <button class="btn btn-sm btn-secondary" type="reset" id="btnReset">Reiniciar</button>                                        
                                         </div>
                                     </div>
                                 </div>
@@ -181,9 +195,8 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                         <input type="text" class="form-control" id="tabDni" placeholder="Enter para buscar">
                         <div class="container" id="lista">                    
                                 <!-- busqueda de personas -->
-                                <ul class="list-group mt-4">
-                                    <li class="list-group-item" id="idcliente"></li>
-                                    <li class="list-group-item" id="nombres"></li>
+                                <ul class="list-group mt-4" id="info">
+                                   
                                 </ul>                    
                         </div>
                         
@@ -202,7 +215,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                         <th>Cliente</th>
                         <th>Fecha de pago</th>
                         <th>Medio de pago</th>
-                        <th>Monto pagado</th>                    
+                        <th>Monto por dia</th>                    
                       </tr>
                     </thead>
                     <tbody>
@@ -227,23 +240,29 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
         <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+        <!-- select2 -->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
           <!-- CDN sweetAlert2 -->
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="../js/dt-pagos.js"></script>
-        <script src="../js/buscar-cli.js"></script>
 
 
         <script>
+
             document.addEventListener("DOMContentLoaded", () =>{
+
+                //Activa el select2 en clientes
+                $("#idcliente").select2();
 
                 //Objetos
                 const lsEmpleado = document.querySelector("#idempleado");
                 const lsUsuario = document.querySelector("#idusuario");
                 const lsHabitacion = document.querySelector("#idhabitacion");
+                const lsCliente = document.querySelector("#idcliente");
                 const btnRegistrar = document.querySelector("#guardar");
-                const listaB = document.querySelector("#lista");
-                const cuerpoLista = listaB.querySelector("ul");
-                const tapInput = document.querySelector("#tabDni")
+                const btnReset = document.querySelector("#btnReset");
+                
+        
 
                 //Métodos
                 function mostrarEmpleado(){
@@ -300,46 +319,44 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                         data.forEach(element => {
                             const optionTag = document.createElement("option");
                             optionTag.value = element.idhabitacion
-                            optionTag.text = element.tipo;
+                            optionTag.text = element.habitacion;
                             lsHabitacion.appendChild(optionTag);                        
                         });
                     });
                 }
 
-                //CON ERRORES FALTA CORREGIR
-                // function buscarCliente(){
-                //     const parameter = new URLSearchParams();
-                //     parameter.append("operacion", "clientesBuscar");
-                //     parameter.append("dni" , document.querySelector("#tabDni").value);
+                function mostrarCliente(){
+                    const parameters = new URLSearchParams();
+                    parameters.append("operacion", "clientesBuscar");                
 
-                //     fetch("../controller/reservacion.controller.php", {
-                //         method: 'POST',
-                //         body: parameter
-                //     })
-                //     .then(response => response.json())
-                //     .then(data => {
-                //         if(data){
-                //             document.querySelector("#idcliente");
-                //             document.querySelector("#nombres");
-                //         }
-                        
-                //     })
-                    
-                  
-
-                // }
+                    fetch("../controller/reservacion.controller.php", {
+                        method: 'POST',
+                        body: parameters
+                    })
+                    .then(response => response.json())
+                    .then(data => {                        
+                        lsCliente.innerHTML = "<option value=''>Buscar cliente..</option>";
+                        data.forEach(element => {
+                            const optionTag = document.createElement("option");
+                            optionTag.value = element.idpersona
+                            optionTag.text = element.clientes;
+                            lsCliente.appendChild(optionTag);                        
+                        });
+                    });
+                }
 
                 function registrarReservacion(){
                     if(confirm("¿Está seguro de registrar?")){
                         const parameters = new URLSearchParams();
                         parameters.append("operacion", "reservacionRegistrar");
-                        parameters.append("idempleado", document.querySelector("#idempleado").value);
                         parameters.append("idusuario", document.querySelector("#idusuario").value);
                         parameters.append("idhabitacion", document.querySelector("#idhabitacion").value);
-                        parameters.append("numcuarto", document.querySelector("#numcuarto").value);
+                        parameters.append("idcliente", document.querySelector("#idcliente").value);
+                        parameters.append("idempleado", document.querySelector("#idempleado").value);
                         parameters.append("fechaentrada", document.querySelector("#fechaentrada").value);
                         parameters.append("fechasalida", document.querySelector("#fechasalida").value);
                         parameters.append("tipocomprobante", document.querySelector("#tipocomprobante").value);
+                        parameters.append("mediopago", document.querySelector("#mediopago").value);
 
                         fetch("../controller/reservacion.controller.php", {
                             method: 'POST',
@@ -358,17 +375,21 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                     }        
                 }
 
+                
 
 
 
                 mostrarEmpleado();
                 mostrarUsuario();
                 mostrarHabitacion();
+                mostrarCliente();
 
 
-                btnRegistrar.addEventListener("click", registrarReservacion);
-             
-
+                btnRegistrar.addEventListener("click", registrarReservacion); 
+                btnReset.addEventListener("click", () => {
+                    const select2 = document.getElementById("idcliente");
+                    select2.innerHTML = 'Cliente';
+                })                           
                 
             });
   

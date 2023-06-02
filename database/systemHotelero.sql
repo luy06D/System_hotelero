@@ -23,6 +23,15 @@ INSERT INTO personas (nombres, apellidos, dni, telefono, fechaNac) VALUES
 			('Daniel Roberto','Garcia Sosa','78111265','954874327','1999-01-05'),
 			('Victor Jésus','Camacho Carrasco','72543987','986744652','2004-11-02');
 
+INSERT INTO personas (nombres, apellidos, dni, telefono, fechaNac) VALUES
+			('Juan Carlos','Vargas Sánchez','70982536','912345678','2003-09-06'),
+			('María Fernanda','López Torres','28467391','987654321','2003-09-06'),
+			('Luis Alberto','Ramírez Rodríguez','51789423','945678912','2003-09-06'),
+			('Ana Gabriela','Castro Mendoza','63295817','934567890','2003-09-06'),
+			('Miguel Ángel','Flores Gutiérrez','14973682','923456789','2003-09-06'),
+			('Carmen Elena','Ruiz Paredes','87521934','901234567','2003-09-06'),
+			('José Eduardo','Mendoza Chávez','39645281','978901234','2003-09-06');
+		
 
 CREATE TABLE usuarios
 (
@@ -111,7 +120,6 @@ INSERT INTO tipohabitaciones (tipo, descripcion) VALUES
 		('Queen','Habitación con cama matrimonial'),
 		('King','Habitación con una cama king-size');
 		
-SELECT * FROM tipohabitaciones
 
 CREATE TABLE habitaciones
 (
@@ -136,10 +144,15 @@ INSERT INTO habitaciones (idtipohabitacion, numcamas, numhabitacion, piso, capac
 			(4, 4, 128, 2, 8, 180),
 			(5, 1, 156, 4, 2, 200),
 			(6, 1, 145, 3, 3, 160);
+			
 
-SELECT * FROM contratos;			
-
-
+INSERT INTO habitaciones (idtipohabitacion, numcamas, numhabitacion, piso, capacidad, precio) VALUES
+			(1, 1, 108, 1, 2, 40),
+			(1, 1, 109, 1, 2, 40),
+			(2, 2, 112, 2, 4, 80),
+			(3, 3, 119, 2, 6, 120);
+		
+		
 
 CREATE TABLE reservaciones
 (
@@ -168,8 +181,7 @@ INSERT INTO reservaciones(idusuario, idhabitacion, idcliente, idempleado, fechae
 	(1,4,1,4,'2023-05-25','2023-06-01', 'B'),
 	(1,5,3,2,'2023-05-27','2023-06-07', 'B');
 
-SELECT * FROM reservaciones;
-	
+
 CREATE TABLE pagos
 (
 	idpago				INT AUTO_INCREMENT PRIMARY KEY,
@@ -235,7 +247,7 @@ CREATE PROCEDURE spu_pagos_get()
 BEGIN 
 	SELECT 	CONCAT (CLI.nombres, ' ', CLI.apellidos) AS cliente,
 			PA.fechapago, PA.mediopago,
-			HA.precio AS montoPagado
+			HA.precio AS montoDia
 			
 			
 	FROM pagos PA
@@ -262,17 +274,15 @@ CALL spu_recuperar_empleados();
 
 -- RECUPERAR CLIENTES
 DELIMITER $$
-CREATE PROCEDURE spu_recuperar_clientes(IN _dni	CHAR(8))
+CREATE PROCEDURE spu_recuperar_clientes()
 BEGIN
 	SELECT idpersona,
 	CONCAT(nombres , ' ' , apellidos) AS clientes
-	FROM personas
-	WHERE dni = _dni;
-	
+	FROM personas;
 END $$
 
-CALL spu_recuperar_clientes('73196921');
-SELECT * FROM personas
+CALL spu_recuperar_clientes();
+
 
 -- RECUPERAR USUARIOS
 
@@ -292,7 +302,7 @@ DELIMITER $$
 CREATE PROCEDURE spu_recuperar_habitaciones()
 BEGIN 
 	SELECT 	HA.idhabitacion, 
-		TH.tipo
+		CONCAT(TH.tipo, '  N°', HA.numhabitacion) AS habitacion
 	FROM habitaciones HA
 	INNER JOIN tipohabitaciones TH ON TH.idtipohabitacion = HA.idtipohabitacion;
 	
@@ -300,27 +310,6 @@ END $$
 
 CALL spu_recuperar_habitaciones();
 
--- REGISTRAR RESERVACIONES
-
-DELIMITER $$
-CREATE PROCEDURE spu_reservaciones_registrar
-(
-IN _idempleado		INT,
-IN _idusuario 		INT,
-IN _idhabitacion  	INT,
-IN _numcuarto		TINYINT,
-IN _fechaentrada	DATE,
-IN _fechasalida		DATE,
-IN _tipocomprobante	CHAR(1)
-)
-BEGIN
-INSERT INTO reservaciones (idempleado, idusuario, idhabitacion, numcuarto, fechaentrada, 
-				fechasalida, tipocomprobante) VALUES
-		(_idempleado, _idusuario, _idhabitacion, _numcuarto, _fechaentrada, _fechasalida, _tipocomprobante);
-		
-END $$
-
-CALL spu_reservaciones_registrar(3,1,2,1,'2023-06-01','2023-06-10','B');
 
 -- MOSTRAR DATOS DE HABITACION
 
@@ -334,6 +323,7 @@ BEGIN
 END $$
 
 CALL spu_habitaciones_data();
+
 
 --  LISTAR USUARIO
 
@@ -350,22 +340,113 @@ END $$
 
 CALL spu_listar_usuarios();
 
--- GRAFICO 
+
+-- REGISTRAR RESERVACIONES
+
+DELIMITER $$
+CREATE PROCEDURE spu_reservaciones_registrar
+(
+IN _idusuario 		INT,
+IN _idhabitacion  	INT,
+IN _idcliente		INT,
+IN _idempleado		INT,
+IN _fechaentrada	DATE,
+IN _fechasalida		DATE,
+IN _tipocomprobante	CHAR(1)
+)
+BEGIN
+INSERT INTO reservaciones (idusuario, idhabitacion, idcliente, idempleado, fechaentrada, 
+				fechasalida, tipocomprobante) VALUES
+		( _idusuario, _idhabitacion, _idcliente, _idempleado, _fechaentrada, _fechasalida, _tipocomprobante);
+		
+		SELECT LAST_INSERT_ID() AS ultimo_id;
+						
+END $$
+
+CALL spu_reservaciones_registrar(1,1,10,1,'2023-06-01','2023-06-10','B');
+
+
+-- REGISTRAR PAGO 
 
 DELIMITER $$ 
-CREATE PROCEDURE spu_mostrar_grafico()
+CREATE PROCEDURE spu_pagos_registrar
+(
+
+-- registros de la reservacion
+IN _idusuario 		INT,
+IN _idhabitacion  	INT,
+IN _idcliente		INT,
+IN _idempleado		INT,
+IN _fechaentrada	DATE,
+IN _fechasalida		DATE,
+IN _tipocomprobante	CHAR(1),
+
+-- registros del pago
+IN _mediopago		VARCHAR(20)
+)
+BEGIN
+	DECLARE ultimo_id INT;
+	
+	CALL spu_reservaciones_registrar(_idusuario, _idhabitacion, _idcliente, _idempleado, _fechaentrada, _fechasalida, _tipocomprobante);
+	
+	SELECT LAST_INSERT_ID() INTO ultimo_id;
+	
+	INSERT INTO pagos (idreservacion, mediopago) VALUES
+			(ultimo_id, _mediopago);
+
+END $$
+
+CALL spu_pagos_registrar(1,1,11,1,'2023-06-01','2023-06-10','B','Tarjeta bancaria');
+
+SELECT * FROM pagos;
+
+
+-- GRAFICO muestra numero de ventas en la semana
+
+DELIMITER $$ 
+CREATE PROCEDURE spu_mostrarNventas_grafico()
 BEGIN 
 
-	SELECT 	PA.fechapago, 
-			HA.precio AS montoPagado
-			
+	SELECT COUNT(*) AS cantReservaciones, DATE(fecharegistro) AS diasReservacion
+	FROM  reservaciones
+	WHERE fecharegistro BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW()
+	GROUP BY DATE(fecharegistro);
+
+END $$
+
+CALL spu_mostrarNventas_grafico();
+
+
+-- GRAFICO2 
+-- Muestra el total de dinero del dia 
+DELIMITER $$
+CREATE PROCEDURE spu_montoTotal_grafico()
+BEGIN
+
+	SELECT CASE
+		WHEN DAYOFWEEK(PA.fechapago) = 1 THEN 'Domingo'
+		WHEN DAYOFWEEK(PA.fechapago) = 2 THEN 'Lunes'
+		WHEN DAYOFWEEK(PA.fechapago) = 3 THEN 'Martes'
+		WHEN DAYOFWEEK(PA.fechapago) = 4 THEN 'Miercoles'
+		WHEN DAYOFWEEK(PA.fechapago) = 5 THEN 'Jueves'
+		WHEN DAYOFWEEK(PA.fechapago) = 6 THEN 'Viernes'
+		WHEN DAYOFWEEK(PA.fechapago) = 7 THEN 'Sabado'
+		ELSE 'Error'
+		END AS dia_semana,
+		SUM(HA.precio) AS monto_venta
 	FROM pagos PA
 	INNER JOIN reservaciones RE ON RE.idreservacion = PA.idreservacion
-	INNER JOIN personas CLI ON CLI.idpersona = RE.idcliente
-	INNER JOIN habitaciones HA ON HA.idhabitacion = RE.idhabitacion;
-		
+	INNER JOIN habitaciones HA ON HA.idhabitacion = RE.idhabitacion
+	GROUP BY dia_semana
+	-- FIELD para especificar el orden
+	ORDER BY FIELD(dia_semana, 'Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo');
 	
 END $$
+
+CALL spu_montoTotal_grafico();
+
+
+
 
 
 

@@ -105,6 +105,32 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                 </nav>
             </div>
             <div id="layoutSidenav_content">
+                <!-- CONTENIDO -->
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-10 col-lg-6 mt-3 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <!-- Aqui se renderiza en grafico -->
+                                    <canvas id="graficoReservaciones"></canvas>
+                                    <h5 class="card-title">Gráfico 1</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-10 col-lg-5 mt-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <!-- Aqui se renderiza en grafico -->
+                                    <canvas id="graficoMonto"></canvas>
+                                    <h5 class="card-title">Gráfico 2</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+ 
                 <!-- Tabla -->
                 <div class=" tableR mt-5">
                 <table id="table_reservaciones" class="table table-bordered border-secondary table-sm display responsive nowrap"  width="100%" >
@@ -150,6 +176,11 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
         <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+        <!-- CDN para crear graficos -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="../js/grafico1.js"></script>
+        <script src="../js/grafico2.js"></script>
+       
   
         <script>
           $(document).ready(function (){

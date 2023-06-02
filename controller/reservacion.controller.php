@@ -7,7 +7,7 @@ if(isset($_POST['operacion'])){
     $reservacion = new Reservaciones();
 
     if($_POST['operacion'] == 'clientesBuscar'){
-         echo json_encode($reservacion->clientes_buscar($_POST['dni']));
+         echo json_encode($reservacion->clientes_buscar());
     }
 
     if($_POST['operacion'] == 'reservacionesGet'){
@@ -40,7 +40,7 @@ if(isset($_POST['operacion'])){
                 <td>{$registro['cliente']}</td>
                 <td>{$registro['fechapago']}</td>
                 <td>{$registro['mediopago']}</td>
-                <td>{$registro['montoPagado']}</td>                
+                <td>{$registro['montoDia']}</td>                
             </tr> 
                 ";
             }
@@ -49,13 +49,14 @@ if(isset($_POST['operacion'])){
 
     if($_POST['operacion'] == 'reservacionRegistrar'){
         $dataSave = [
-            "idempleado"        => $_POST['idempleado'],
             "idusuario"         => $_POST['idusuario'],
             "idhabitacion"      => $_POST['idhabitacion'],
-            "numcuarto"         => $_POST['numcuarto'],
+            "idcliente"         => $_POST['idcliente'],
+            "idempleado"        => $_POST['idempleado'],
             "fechaentrada"      => $_POST['fechaentrada'],
             "fechasalida"       => $_POST['fechasalida'],
-            "tipocomprobante"   => $_POST['tipocomprobante']
+            "tipocomprobante"   => $_POST['tipocomprobante'],
+            "mediopago"         => $_POST['mediopago']
         ];
 
         $response = $reservacion->reservaciones_register($dataSave);

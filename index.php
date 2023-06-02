@@ -38,12 +38,12 @@ if(isset($_SESSION['segurity']) && $_SESSION['segurity']['login']){
             <form style="width: 40rem; text-align: center; ">
   
               <h2 class="fw-normal mb-3 pb-3 fw-bold title" >Bienvenido a Larcomar</h2>  
-              <div class="col-12 col-md-12 col-lg-10">
+             
                 <div class="form-floating mb-4">
                   <input type="text" id="email" class="form-control form-control-sm"  placeholder="Ingrese su usuario"/>
                   <label class="form-label" for="email">Nombre Usuario</label>
                 </div>
-              </div>    
+              
                
   
               <div class="form-floating mb-3">
