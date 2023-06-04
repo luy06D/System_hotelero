@@ -20,6 +20,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="../style/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="../style/inicio.css">
+        <link rel="stylesheet" href="../style/card.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
           <!-- Datatable for BS5 -->
@@ -36,8 +37,9 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                 <span class="h3  mb-0" style="color: #ffffff;">Larcomar</span>
             </div>
            
+           
             <!-- Sidebar Toggle-->
-            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 mt-2" style="font-size: 20px;" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 mt-2" style="font-size: 20px;" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>            
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                 <!-- <div class="input-group">
@@ -75,7 +77,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                             <a class="nav-link" href="./habitaciones.php">
                                 <div class="sb-nav-link-icon"><i class="bi bi-door-open"></i></div>
                                 Habitaciones
-                            </a>
+                            </a>                                                     
                             <div class="sb-sidenav-menu-heading">Complementos</div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="bi bi-people-fill"></i></div>
@@ -84,14 +86,15 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="layout-static.html">Nuevo Usuario</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Nuevo Empleado</a>
+                                    <a class="nav-link" href="./usuarios.php">Nuevo Usuario</a>
+                                    <a class="nav-link" href="">Nuevo Empleado</a>
                                 </nav>
-                            </div>                                                       
+                            </div>                            
                             <a class="nav-link" href="./graficos.php">
                                 <div class="sb-nav-link-icon"><i class="bi bi-graph-up"></i></div>
                                 Graficos
-                            </a>                                                        
+                            </a>
+                                                       
                             <a class="nav-link" href="../controller/usuario.controller.php?operacion=destroy">
                                 <div class="sb-nav-link-icon"><i class="bi bi-box-arrow-in-left"></i></div>
                                 Cerrar sesion
@@ -107,69 +110,36 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
             </div>
             <div id="layoutSidenav_content">
                 <!-- CONTENIDO -->
+
+                
                 <div class="container">
-                    <div class="row mt-3">
-
-                        <div class="col-md-12 col-lg-12">
-                            <form action="" id="form-reservaciones" autocomplete="off">
-                                <div class="card">
-                                    <div class="card-header">
-                                        Registro de usuarios
-                                    </div>
-                                    <div class="card-body">                                        
-                                        <div class="mb-3">
-                                            <label for="persona" class="form-label">Persona</label>
-                                            <select  id="persona" class="form-select">
-                                                <option value="">Selección</option>
-                                            </select>
-                                        </div>                                       
-                                        <div class="mb-3">
-                                            <label for="email" class="form-label">Email</label>
-                                            <input type="number" id="email" class="form-control form-control-sm">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="nombreusuario" class="form-label">Nombre de usuario</label>
-                                            <input type="date" id="nombreusuario" class="form-control form-control-sm">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="contraseña" class="form-label">Contraseña</label>
-                                            <input type="date" id="contraseña" class="form-control form-control-sm">
-                                        </div>                                        
-                                        <div class="d-grid gap-2">
-                                            <button class="btn btn-sm btn-success" id="guardar" type="button">Registrar</button>
-                                            <button class="btn btn-sm btn-secondary" type="reset">Reiniciar</button>
-                                            
-                                        </div>
-                                    </div>
+                    <div class="row">
+                        <div class="col-md-10 col-lg-6 mt-3 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <!-- Aqui se renderiza en grafico -->
+                                    <canvas id="graficoReservaciones"></canvas>
+                                    <h5 class="card-title">Gráfico 1</h5>
                                 </div>
-
-                            </form>
-
+                            </div>
+                        </div>
+                        <div class="col-md-10 col-lg-5 mt-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <!-- Aqui se renderiza en grafico -->
+                                    <canvas id="graficoMonto"></canvas>
+                                    <h5 class="card-title">Gráfico 2</h5>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                
-                
-                  <!-- TABLA USUARIOS -->
-                  <div class=" tableR ">
-                  <table id="table_usuarios" class="table table-bordered border-secondary table-sm display responsive nowrap"  width="100%" >
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Nombres</th>
-                          <th>Apellidos</th>
-                          <th>Email</th>
-                          <th>Nombre de usuario</th>                      
-                        </tr>
-                      </thead>
-                      <tbody>
 
-                      </tbody>
-                    </table>
-                  </div>
-                  </div>
+          
             </div>
         </div>
+       
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="../js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -181,38 +151,10 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
         <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
-
-        <script>
-          $(document).ready(function (){
-
-            function get_usuarios(){
-              $.ajax({
-                url: '../controller/usuarionew.controller.php',
-                type: 'POST',
-                data: {'operacion' : 'usersGet'},
-                success: function (result){
-                  var dt = $("#table-usuarios").DataTable();
-                  dt.destroy();
-
-                  $("#table_usuarios tbody").html(result);
-
-                  $("#table_usuarios").DataTable({
-                    dom: 'Bfrtip',
-                    responsive: true,
-                    languaje: {
-                       url:'../js/Spanish.json'
-                    }
-                  });
-                }
-              });
-            }
-
-            get_usuarios();
-          });
-        </script>
-
-      
-
+            <!-- CDN para crear graficos -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="../js/grafico1.js"></script>
+        <script src="../js/grafico2.js"></script>
 
     </body>
 </html>

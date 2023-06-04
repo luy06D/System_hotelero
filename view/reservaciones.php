@@ -28,8 +28,14 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <!-- estilos de select2   -->
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         
-    </head>
+    </head>    
     <body class="sb-nav-fixed">
+        <style>
+            .spacing{
+                margin-right: 10px;
+                }
+
+        </style>
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-success">
             <!-- Navbar Brand-->
 
@@ -42,15 +48,16 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 mt-2" style="font-size: 20px;" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-                <div class="input-group">
+                <!-- <div class="input-group">
                     <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
                     <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-                </div>
+                </div> -->
             </form>
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i>
+                    <label for="" class="px-1 ms-xl-3 mt-1 text-white">User : <?= $_SESSION['segurity']['nombreusuario'] ?></label></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#!">Configuracion</a></li>
                         <li><a class="dropdown-item" href="#!">Registro de actividades</a></li>
@@ -89,7 +96,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                                     <a class="nav-link" href="">Nuevo Empleado</a>
                                 </nav>
                             </div>                          
-                            <a class="nav-link" href="tables.html">
+                            <a class="nav-link" href="./graficos.php">
                                 <div class="sb-nav-link-icon"><i class="bi bi-graph-up"></i></div>
                                 Graficos
                             </a>                                                         
@@ -108,16 +115,18 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
             </div>
             <div id="layoutSidenav_content">
                 <!-- CONTENIDO  -->
-                <div class="container">
+                <div class="container mt-3">
                     <div class="row mt-3">
 
                         <div class="col-md-12 col-lg-12">
                             <form action="" id="form-reservaciones" autocomplete="off">
                                 <div class="card">
-                                    <div class="card-header bg-success text-white text-center" style="font-size: 20px ;">
+                                    <div class="card-header  text-center text-white bg-success" style="font-size: 20px ;">
                                         Registro de reservaciones
-                                    </div>
+                                    </div>                                   
                                     <div class="card-body">
+                                        <div style="color: #9E9E9E;">Datos de la reservación</div>
+                                        <hr>
                                         <div class="mb-3">                                    
                                             <select  id="idcliente" class="js-example-responsive" style="width: 100%;" >
                                                 <option value=""></option>
@@ -157,7 +166,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                                                 <option value="B">B</option>
                                             </select>                                                        
                                         </div>
-                                        <div>Datos del pago</div>
+                                        <div style="color: #9E9E9E;">Datos del pago</div>
                                         <hr>
                                         <div class="mb-3">
                                             <label for="mediopago" class="form-label">Medio de pago</label>
@@ -346,7 +355,22 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                 }
 
                 function registrarReservacion(){
-                    if(confirm("¿Está seguro de registrar?")){
+                    Swal.fire({
+                        title: "¿Está seguro de registrar?",
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonText: "Sí",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonColor: '#03643a',
+                        customClass: {
+                            confirmButton: "spacing",
+                            cancelButton: "spacing"
+                        }
+
+
+                    }).then((result)=>{
+                        if(result.isConfirmed){
+
                         const parameters = new URLSearchParams();
                         parameters.append("operacion", "reservacionRegistrar");
                         parameters.append("idusuario", document.querySelector("#idusuario").value);
@@ -366,17 +390,23 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                         .then(data => {
                             console.log(data);
                             if(data.status){
-                                document.querySelector("#form-reservaciones").reset();                            
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Su reservacion a sido exitosa',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                    })
+                                document.querySelector("#form-reservaciones").reset();    
+                                $("#idcliente").val(null).trigger('change');                                                     
                             }else{
-                                alert(data.message);
+                                Swal.fire("Error", data.message, "error");                                
                             }
                         });
 
-                    }        
+                        }
+                    });                   
                 }
-
-                
-
 
 
                 mostrarEmpleado();
@@ -387,8 +417,8 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
 
                 btnRegistrar.addEventListener("click", registrarReservacion); 
                 btnReset.addEventListener("click", () => {
-                    const select2 = document.getElementById("idcliente");
-                    select2.innerHTML = 'Cliente';
+                    //Resetear el select2
+                    $("#idcliente").val(null).trigger('change');            
                 })                           
                 
             });

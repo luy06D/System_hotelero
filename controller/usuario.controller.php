@@ -21,6 +21,7 @@ if(isset($_GET['operacion'])){
       "login"   => false,
       "apellidos" => "",
       "nombres" => "",
+      "nombreusuario" => "",
       "mensaje"  => ""
     ];
 
@@ -34,6 +35,7 @@ if(isset($_GET['operacion'])){
           $acceso["login"] = true;
           $acceso["apellidos"] = $data["apellidos"];
           $acceso["nombres"] = $data["nombres"];
+          $acceso["nombreusuario"] = $data["nombreusuario"];
       }else{
         $acceso["mensaje"] = "Contraseña";
       }

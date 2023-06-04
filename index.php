@@ -8,7 +8,6 @@ if(isset($_SESSION['segurity']) && $_SESSION['segurity']['login']){
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

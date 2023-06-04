@@ -40,15 +40,17 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 mt-2" style="font-size: 20px;" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-                <div class="input-group">
+                <!-- <div class="input-group">
                     <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
                     <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-                </div>
+                </div> -->
             </form>
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i>
+                    <label for="" class="px-1 ms-xl-3 mt-1 text-white">User : <?= $_SESSION['segurity']['nombreusuario'] ?></label></a>
+                    
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#!">Configuracion</a></li>
                         <li><a class="dropdown-item" href="#!">Registro de actividades</a></li>
@@ -87,7 +89,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                                     <a class="nav-link" href="">Nuevo Empleado</a>
                                 </nav>
                             </div>                                                       
-                            <a class="nav-link" href="tables.html">
+                            <a class="nav-link" href="./graficos.php">
                                 <div class="sb-nav-link-icon"><i class="bi bi-graph-up"></i></div>
                                 Graficos
                             </a>                                                        
@@ -114,7 +116,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                                 <div class="card-body">
                                     <!-- Aqui se renderiza en grafico -->
                                     <canvas id="graficoReservaciones"></canvas>
-                                    <h5 class="card-title">Gráfico 1</h5>
+                                    <h5 class="card-title mt-3">Gráfico 1</h5>
                                 </div>
                             </div>
                         </div>
@@ -123,7 +125,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                                 <div class="card-body">
                                     <!-- Aqui se renderiza en grafico -->
                                     <canvas id="graficoMonto"></canvas>
-                                    <h5 class="card-title">Gráfico 2</h5>
+                                    <h5 class="card-title mt-2">Gráfico 2</h5>
                                 </div>
                             </div>
                         </div>
