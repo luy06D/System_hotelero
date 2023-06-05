@@ -99,6 +99,69 @@ class Reservaciones extends Conexion{
         return $response; 
     }
 
+    public function reservaciones_eliminar($idreservacion = 0){
+        $respuesta = [
+            "status" => false,
+            "message" => ""
+        ];
+
+        try{
+            $query = $this->conexion->prepare("CALL spu_reservaciones_eliminar(?)");
+            $respuesta["status"] = $query->execute(array($idreservacion));
+
+        }
+        catch(Exception $e){
+            $respuesta["message"] = "No se ha podido completar el proceso. Codigo error: " . $e->getCode();
+
+        }
+
+        return $respuesta;
+
+    }
+
+    public function reservaciones_update($datos = []){
+        $response = [
+            "status" => false,
+            "message" => ""
+        ];
+
+        try{
+            $query = $this->conexion->prepare("CALL spu_reservaciones_update(?,?,?,?,?,?,?,?)");
+            $response["status"] = $query->execute(
+                array(
+                    $datos["idreservacion"],
+                    $datos["idusuario"],
+                    $datos["idhabitacion"],
+                    $datos["idcliente"],
+                    $datos["idempleado"],
+                    $datos["fechaentrada"],
+                    $datos["fechasalida"],
+                    $datos["tipocomprobante"]                    
+                )
+            );
+        }
+        catch(Exception $e){
+            $response["message"] = "No se completo el proceso. Codigo error: " . $e->getCode();
+
+        }
+        return $response; 
+
+
+    }
+
+    public function recuperarReserv($idreservacion = 0){
+        try{
+            $query = $this->conexion->prepare("CALL spu_reservaciones_recuperar(?)");
+            $query->execute(array($idreservacion));
+            return $query->fetch(PDO::FETCH_ASSOC);
+
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+
+        }
+    }
+
 
 }
 

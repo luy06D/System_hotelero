@@ -17,7 +17,7 @@ if(isset($_POST['operacion'])){
             foreach($data as $registro){
                 echo "
                 <tr>
-                    <td>{$registro['idreservacion']}</td>
+                    <td>{$registro['idreservacion']}</td>                    
                     <td>{$registro['cliente']}</td>
                     <td>{$registro['fechaentrada']}</td>
                     <td>{$registro['fechasalida']}</td>
@@ -25,6 +25,10 @@ if(isset($_POST['operacion'])){
                     <td>{$registro['piso']}</td>
                     <td>{$registro['capacidad']}</td>
                     <td>{$registro['precio']}</td> 
+                    <td>
+                    <a href='#' data-ideditar='{$registro['idreservacion']}' class='btn btn-sm btn-success editar'><i class='fa-solid fa-pen-to-square'></i></a>                          
+                    <a href='#' data-ideliminar='{$registro['idreservacion']}' class='btn btn-sm btn-danger eliminar'><i class='fa-solid fa-trash'></i></a>                
+                    </td>                   
                 </tr>          
                 ";
             }
@@ -40,7 +44,8 @@ if(isset($_POST['operacion'])){
                 <td>{$registro['cliente']}</td>
                 <td>{$registro['fechapago']}</td>
                 <td>{$registro['mediopago']}</td>
-                <td>{$registro['montoDia']}</td>                
+                <td>{$registro['precioDia']}</td> 
+                <td>{$registro['montoPagar']}</td>               
             </tr> 
                 ";
             }
@@ -75,6 +80,32 @@ if(isset($_POST['operacion'])){
         echo json_encode($reservacion->habitacion_get());
     }
 
+    if($_POST['operacion'] == 'reservacionEliminar'){
+        $response = $reservacion->reservaciones_eliminar($_POST['idreservacion']);
+        echo json_encode($response);
+    }
+
+    if($_POST['operacion'] == 'reservacionUpdate'){
+        $dataUpdate = [
+            "idreservacion"     => $_POST['idreservacion'],
+            "idusuario"         => $_POST['idusuario'],
+            "idhabitacion"      => $_POST['idhabitacion'],
+            "idcliente"         => $_POST['idcliente'],
+            "idempleado"        => $_POST['idempleado'],
+            "fechaentrada"      => $_POST['fechaentrada'],
+            "fechasalida"       => $_POST['fechasalida'],
+            "tipocomprobante"   => $_POST['tipocomprobante']    
+        ];
+
+        $response = $reservacion->reservaciones_update($dataUpdate);
+        echo json_encode($response);
+
+    }
+
+    if($_POST['operacion'] == 'recuperarDatos'){
+        $data = $reservacion->recuperarReserv($_POST['idreservacion']);
+        echo json_encode($data);
+    }
    
 
 

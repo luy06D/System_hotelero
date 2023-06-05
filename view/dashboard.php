@@ -25,6 +25,8 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
           <!-- Datatable for BS5 -->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
+             <!-- estilos de select2   -->
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     </head>
     <body class="sb-nav-fixed">
@@ -138,14 +140,15 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                 <table id="table_reservaciones" class="table table-bordered border-secondary table-sm display responsive nowrap"  width="100%" >
                     <thead>
                       <tr>
-                        <th>#</th>
+                        <th>#</th>                        
                         <th>Cliente</th>
                         <th>Fecha entrada</th>
                         <th>Fecha Salida</th>
                         <th>N° habitacion</th>
                         <th>Piso</th>
                         <th>Capacidad</th>
-                        <th>Precio</th>
+                        <th>Precio</th>                        
+                        <th>Operaciones</th> 
                       </tr>
                     </thead>
                     <tbody>
@@ -153,6 +156,71 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                     </tbody>
                   </table>
                 </div>
+            
+                <!-- Modal Body -->
+                <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+                <div class="modal fade" id="modal-actualizar" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered " role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalTitleId">Actualizar reservacion</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            <form action="" id="form-reservaciones" autocomplete="off">
+                                      
+                                        <div class="mb-3">
+                                            <label for="idcliente" class="form-label">Cliente</label>
+                                            <select  id="idcliente" class="form-select" disabled>
+                                                <option value="">Selección</option>
+                                            </select>
+                                        </div> 
+                                        <div class="mb-3">
+                                            <label for="idempleado" class="form-label">Empleado</label>
+                                            <select  id="idempleado" class="form-select" disabled>
+                                                <option value="">Selección</option>
+                                            </select>
+                                        </div>                                       
+                                        <div class="mb-3">
+                                            <label for="idusuario" class="form-label">Usuario</label>
+                                            <select  id="idusuario" class="form-select" disabled>
+                                                <option value="">Selección</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="idhabitacion" class="form-label">Habitacion</label>
+                                            <select  id="idhabitacion" class="form-select">
+                                                <option value="">Selección</option>
+                                            </select>            
+                                        </div>                                       
+                                        <div class="mb-3">
+                                            <label for="fechaentrada" class="form-label">Fecha de entrada</label>
+                                            <input type="date" id="fechaentrada" class="form-control form-control-sm">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="fechasalida" class="form-label">Fecha de salida</label>
+                                            <input type="date" id="fechasalida" class="form-control form-control-sm">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="tipocomprobante" class="form-label">Tipo de comprobante (FACTURA - BOLETA)</label>
+                                            <select  id="tipocomprobante" class="form-select">
+                                                <option value="">Selección</option>
+                                                <option value="F">F</option>
+                                                <option value="B">B</option>
+                                            </select>                                                        
+                                        </div>                                                                           
+                                                          
+                            </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary" id="btnActualizar">Actualizar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
                 <footer class="py-4  mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
@@ -178,14 +246,22 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
         <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+        <!-- select2 -->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <!-- CDN para crear graficos -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="../js/grafico1.js"></script>
         <script src="../js/grafico2.js"></script>
-       
+        <script src="../js/mostrarSelect.js"></script>
+
   
         <script>
+                    
           $(document).ready(function (){
+             //Activa el select2 en clientes
+            $("#cliente").select2();
+
+            let idreservacion = 0;
 
             function get_reservaciones(){
               $.ajax({
@@ -210,10 +286,103 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
               });
             }
 
+            function reservacionEliminar(id){
+                if(confirm("¿Esta seguro de eliminar la reservacion?")){
+                    $.ajax({
+                        url: '../controller/reservacion.controller.php',
+                        type: 'POST',
+                        data: {
+                            'operacion' : 'reservacionEliminar',
+                            'idreservacion' : id
+                        },
+                        success: function(){
+                            get_reservaciones();
+                        }
+                    });
+                }
+            }
+
+            
+            function reservacionesUpdate(){
+
+                let enviar = {
+                    'operacion'         : 'reservacionUpdate',  
+                    'idreservacion'     : idreservacion,                  
+                    'idcliente'         : $("#idcliente").val(),
+                    'idempleado'        : $("#idempleado").val(),
+                    'idusuario'         : $("#idusuario").val(),
+                    'idhabitacion'      : $("#idhabitacion").val(),
+                    'fechaentrada'      : $("#fechaentrada").val(),
+                    'fechasalida'       : $("#fechasalida").val(),
+                    'tipocomprobante'   : $("#tipocomprobante").val(),
+
+                }
+
+                if(confirm("¿Esta seguro de realizar esta accion?")){
+                    $.ajax({
+                        url: '../controller/reservacion.controller.php',
+                        type: 'POST',
+                        data:enviar,
+                        success: function(result){
+                            get_reservaciones();
+
+                            $("#modal-actualizar").modal('hide');
+                        }
+                    });
+                }
+
+                
+
+            }
+
+            function recuperarReser(id){
+                $("#form-reservaciones")[0].reset();
+
+                $.ajax({
+                    url: '../controller/reservacion.controller.php',
+                    type: 'POST',
+                    data: {
+                        'operacion' : 'recuperarDatos',
+                        'idreservacion' : id                       
+                    },
+                    dataType: 'JSON',
+                    success: function(result){
+                        $("#idcliente").val(result.idcliente);
+                        $("#idempleado").val(result.idempleado);
+                        $("#idusuario").val(result.idusuario);
+                        $("#idhabitacion").val(result.idhabitacion);
+                        $("#fechaentrada").val(result.fechaentrada);
+                        $("#fechasalida").val(result.fechasalida);
+                        $("#tipocomprobante").val(result.tipocomprobante);
+                    }
+                });
+
+                $("#modal-actualizar").modal('show');
+
+            }
+
+
+            //Eventos
+            $("#table_reservaciones tbody").on("click", ".eliminar", function(){
+                idreservacion = $(this).data("ideliminar");
+                reservacionEliminar(idreservacion);
+
+            });
+
+            $("#table_reservaciones tbody").on("click", ".editar", function(){
+                idreservacion = $(this).data("ideditar");
+                recuperarReser(idreservacion);
+            })
+
+            $("#btnActualizar").click(reservacionesUpdate);
+
            
             get_reservaciones();
+            mostrarClientes();
+            mostrarEmpleados();
 
           });
         </script>
+
     </body>
 </html>

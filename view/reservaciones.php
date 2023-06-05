@@ -224,7 +224,8 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                         <th>Cliente</th>
                         <th>Fecha de pago</th>
                         <th>Medio de pago</th>
-                        <th>Monto por dia</th>                    
+                        <th>Precio por dia</th>  
+                        <th>Monto a pagar</th>                           
                       </tr>
                     </thead>
                     <tbody>
@@ -232,9 +233,6 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                     </tbody>
                   </table>
                 </div>
-
-
-                
               
             </div>
         </div>
@@ -254,6 +252,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
           <!-- CDN sweetAlert2 -->
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="../js/dt-pagos.js"></script>
+        <script src="../js/mostrarSelect.js"></script>
 
 
         <script>
@@ -271,88 +270,6 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                 const btnRegistrar = document.querySelector("#guardar");
                 const btnReset = document.querySelector("#btnReset");
                 
-        
-
-                //Métodos
-                function mostrarEmpleado(){
-                    const parameters = new URLSearchParams();
-                    parameters.append("operacion", "empleadosGet");
-
-                    fetch("../controller/reservacion.controller.php", {
-                        method: 'POST',
-                        body: parameters
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        lsEmpleado.innerHTML = "<option value=''>Seleccione</option>";
-                        data.forEach(element => {
-                            const optionTag = document.createElement("option");
-                            optionTag.value = element.idempleado
-                            optionTag.text = element.nombres;
-                            lsEmpleado.appendChild(optionTag);                        
-                        });
-                    });
-                }
-
-                function mostrarUsuario(){
-                    const parameters = new URLSearchParams();
-                    parameters.append("operacion", "usuariosGet");
-
-                    fetch("../controller/reservacion.controller.php", {
-                        method: 'POST',
-                        body: parameters
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        lsUsuario.innerHTML = "<option value=''>Seleccione</option>";
-                        data.forEach(element => {
-                            const optionTag = document.createElement("option");
-                            optionTag.value = element.idusuario
-                            optionTag.text = element.nombreusuario;
-                            lsUsuario.appendChild(optionTag);                        
-                        });
-                    });
-                }
-
-                function mostrarHabitacion(){
-                    const parameters = new URLSearchParams();
-                    parameters.append("operacion", "habitacionesGet");
-
-                    fetch("../controller/reservacion.controller.php", {
-                        method: 'POST',
-                        body: parameters
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        lsHabitacion.innerHTML = "<option value=''>Seleccione</option>";
-                        data.forEach(element => {
-                            const optionTag = document.createElement("option");
-                            optionTag.value = element.idhabitacion
-                            optionTag.text = element.habitacion;
-                            lsHabitacion.appendChild(optionTag);                        
-                        });
-                    });
-                }
-
-                function mostrarCliente(){
-                    const parameters = new URLSearchParams();
-                    parameters.append("operacion", "clientesBuscar");                
-
-                    fetch("../controller/reservacion.controller.php", {
-                        method: 'POST',
-                        body: parameters
-                    })
-                    .then(response => response.json())
-                    .then(data => {                        
-                        lsCliente.innerHTML = "<option value=''>Buscar cliente..</option>";
-                        data.forEach(element => {
-                            const optionTag = document.createElement("option");
-                            optionTag.value = element.idpersona
-                            optionTag.text = element.clientes;
-                            lsCliente.appendChild(optionTag);                        
-                        });
-                    });
-                }
 
                 function registrarReservacion(){
                     Swal.fire({
@@ -407,12 +324,6 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                         }
                     });                   
                 }
-
-
-                mostrarEmpleado();
-                mostrarUsuario();
-                mostrarHabitacion();
-                mostrarCliente();
 
 
                 btnRegistrar.addEventListener("click", registrarReservacion); 

@@ -5,6 +5,7 @@ CREATE DATABASE sistema_hotelero;
 USE sistema_hotelero;
 
 
+
 CREATE TABLE personas
 (
 	idpersona		INT AUTO_INCREMENT PRIMARY KEY,
@@ -166,6 +167,7 @@ CREATE TABLE reservaciones
 	fechasalida			DATE 		NOT NULL,
 	tipocomprobante		CHAR(1)		NOT NULL,  -- F(factura) , B(boleta)   
 	fechacomprobante	DATETIME 	NOT NULL DEFAULT NOW(),
+	estado			CHAR(1)		NOT NULL DEFAULT '1',
 	CONSTRAINT fk_res_idu FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
 	CONSTRAINT fk_res_idh FOREIGN KEY (idhabitacion) REFERENCES habitaciones (idhabitacion),
 	CONSTRAINT fk_res_idc FOREIGN KEY (idcliente) REFERENCES personas (idpersona), -- foreanea clientes de la entidad personas
@@ -210,8 +212,8 @@ CREATE PROCEDURE spu_usuarios_iniciarS (IN _email VARCHAR(50))
 BEGIN 
 
 	SELECT usuarios.`idusuario`,
-		personas.`apellidos`, personas.`nombres`,
-		usuarios.email, usuarios.`claveacceso`
+		personas.`apellidos`, personas.`nombres`,		
+		usuarios.nombreusuario,	usuarios.email, usuarios.`claveacceso`
 	FROM usuarios
 	INNER JOIN personas ON personas.`idpersona` = usuarios.`idpersona`
 	WHERE email = _email AND estado = '1';  
@@ -235,10 +237,67 @@ BEGIN
 	INNER JOIN empleados EM ON EM.idempleado = RE.idempleado 
 	INNER JOIN personas CLI ON CLI.idpersona = RE.idcliente
 	INNER JOIN habitaciones HA ON HA.idhabitacion = RE.idhabitacion
+	WHERE RE.estado = '1'
 	ORDER BY RE.idreservacion;
+		
 END $$
 
 CALL spu_reservaciones_get();
+
+
+-- ELIMINAR RESERVACIONES
+DELIMITER $$ 
+CREATE PROCEDURE spu_reservaciones_eliminar(IN _idreservacion INT)
+BEGIN
+	UPDATE reservaciones SET estado = '0'
+	WHERE idreservacion = _idreservacion;
+END $$
+
+CALL spu_reservaciones_eliminar(2);
+
+-- UPDATE reservaciones SET estado = '1';
+
+-- ACTUALIZAR RESERVACIONES
+DELIMITER $$
+CREATE PROCEDURE spu_reservaciones_update
+(
+IN _idreservacion 	INT,
+IN _idusuario 		INT,
+IN _idhabitacion 	INT,
+IN _idcliente 		INT,
+IN _idempleado 		INT,
+IN _fechaentrada 	DATE,
+IN _fechasalida 	DATE,
+IN _tipocomprobante 	CHAR(1)
+)
+BEGIN
+	UPDATE reservaciones SET
+	 idusuario = _idusuario,
+	 idhabitacion = _idhabitacion,
+	 idcliente = _idcliente,
+	 idempleado = _idempleado,
+	 fechaentrada = _fechaentrada,
+	 fechasalida = _fechasalida,
+	 tipocomprobante = _tipocomprobante
+	 WHERE idreservacion = _idreservacion;
+
+END $$
+
+CALL spu_reservaciones_update(6,1,2,11,2, '2023-06-01','2023-06-08','B');
+
+-- RECUPERAR RESERVACIONES
+
+DELIMITER $$ 
+CREATE PROCEDURE spu_reservaciones_recuperar(IN _idreservacion INT )
+BEGIN 
+	SELECT  idreservacion,idcliente, idempleado, idusuario,
+		idhabitacion, fechaentrada, fechasalida, 
+		tipocomprobante
+	FROM reservaciones
+	WHERE idreservacion = _idreservacion;
+END $$
+
+CALL spu_reservaciones_recuperar(1);
 
 
 -- MOSTRAR PAGOS 
@@ -246,10 +305,10 @@ DELIMITER $$
 CREATE PROCEDURE spu_pagos_get()
 BEGIN 
 	SELECT 	CONCAT (CLI.nombres, ' ', CLI.apellidos) AS cliente,
-			PA.fechapago, PA.mediopago,
-			HA.precio AS montoDia
-			
-			
+			PA.fechapago, PA.mediopago, HA.precio AS precioDia, 
+			DATEDIFF(RE.fechasalida, RE.fechaentrada) 
+			* HA.precio AS montoPagar
+				
 	FROM pagos PA
 	INNER JOIN reservaciones RE ON RE.idreservacion = PA.idreservacion
 	INNER JOIN personas CLI ON CLI.idpersona = RE.idcliente
@@ -323,6 +382,43 @@ BEGIN
 END $$
 
 CALL spu_habitaciones_data();
+
+-- NUMERO DE HABITACIONES DISPONIBLES
+
+DELIMITER $$ 
+CREATE PROCEDURE spu_haDisponibles_mostrar()
+BEGIN
+		
+	SELECT	COUNT(*) AS habitaciones_disponibles
+	FROM habitaciones
+	WHERE estado = 'Disponible';
+END $$
+
+CALL spu_haDisponibles_mostrar();
+
+
+-- NUMERO DE HABITACIONES OCUPADAS
+DELIMITER $$ 
+CREATE PROCEDURE spu_haOcupadas_mostrar()
+BEGIN
+	SELECT COUNT(*) AS habitaciones_ocupadas
+	FROM habitaciones
+	WHERE estado = 'Ocupado';
+END $$
+
+CALL spu_haOcupadas_mostrar();
+
+
+-- NUMERO DE HABITACIONES EN LIMPIENZA
+DELIMITER $$ 
+CREATE PROCEDURE spu_haLimpieza_mostrar()
+BEGIN
+	SELECT COUNT(*) AS habitaciones_Limpieza
+	FROM habitaciones
+	WHERE estado = 'Limpieza';
+END $$
+
+CALL spu_haLimpieza_mostrar();
 
 
 --  LISTAR USUARIO
