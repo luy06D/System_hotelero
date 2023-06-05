@@ -2,6 +2,7 @@
 session_start();
 
 // Comprobamos si el usuario inicio sesión
+
 if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
     header('Location:../index.php');
 }
@@ -214,7 +215,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-primary" id="btnActualizar">Actualizar</button>
+                                <button type="button" class="btn btn-success" id="btnActualizar">Actualizar</button>
                             </div>
                         </div>
                     </div>
@@ -248,6 +249,8 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
         <!-- select2 -->
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+          <!-- CDN sweetAlert2 -->
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- CDN para crear graficos -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="../js/grafico1.js"></script>
@@ -287,8 +290,19 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
             }
 
             function reservacionEliminar(id){
-                if(confirm("¿Esta seguro de eliminar la reservacion?")){
-                    $.ajax({
+                Swal.fire({
+                    title: "¿Está seguro de eliminar la reservación?",
+                    text: "Esta acción no se puede deshacer",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Eliminar",
+                    cancelButtonText: "Cancelar",
+
+                }).then(function (result){
+                    if(result.isConfirmed){
+                        $.ajax({
                         url: '../controller/reservacion.controller.php',
                         type: 'POST',
                         data: {
@@ -297,9 +311,20 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                         },
                         success: function(){
                             get_reservaciones();
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Eliminando reservacion',
+                                showConfirmButton: false,
+                                timer: 1500
+                                })
                         }
                     });
-                }
+
+                    }
+                });
+                   
+                
             }
 
             
@@ -318,8 +343,19 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
 
                 }
 
-                if(confirm("¿Esta seguro de realizar esta accion?")){
-                    $.ajax({
+                Swal.fire({
+                    title: "¿Está seguro de realizar esta acción?",
+                    text: "Esta acción no se puede deshacer",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Confirmar",
+                    cancelButtonText: "Cancelar",
+
+                }).then(function (result){
+                    if(result.isConfirmed){
+                        $.ajax({
                         url: '../controller/reservacion.controller.php',
                         type: 'POST',
                         data:enviar,
@@ -329,7 +365,9 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                             $("#modal-actualizar").modal('hide');
                         }
                     });
-                }
+                    }
+                })
+                   
 
                 
 

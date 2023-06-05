@@ -255,7 +255,7 @@ END $$
 
 CALL spu_reservaciones_eliminar(2);
 
--- UPDATE reservaciones SET estado = '1';
+ UPDATE reservaciones SET estado = '1';
 
 -- ACTUALIZAR RESERVACIONES
 DELIMITER $$
@@ -489,6 +489,8 @@ BEGIN
 	
 	INSERT INTO pagos (idreservacion, mediopago) VALUES
 			(ultimo_id, _mediopago);
+	-- Actualizando estado 
+	UPDATE habitaciones SET estado = 'Ocupado' WHERE idhabitacion = _idhabitacion;
 
 END $$
 
