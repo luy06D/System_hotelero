@@ -86,6 +86,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="./clientes.php">Nuevo Cliente</a>
                                     <a class="nav-link" href="./usuarios.php">Nuevo Usuario</a>
                                     <a class="nav-link" href="">Nuevo Empleado</a>
                                 </nav>
@@ -110,32 +111,86 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
             </div>
             <div id="layoutSidenav_content">
                 <!-- CONTENIDO -->
+                 
                 <div class="container">
-                    <div class="row">
-                        <div class="col mt-3 mb-5" id="H_dispo">
+                <button type="button" class="btn btn-success mt-3" id="btnRegistrarH" data-bs-toggle="modal" data-bs-target="#modal-registro">Nueva habitacion</button>   
+                    <div class="row mt-3 mb-5">
+                        <div class="col-md-4 mb-3" id="H_dispo">
                             <div>
                                 <!-- DATOS ASINCRONOS -->
                             </div>
                         </div>
-                        <div class="col mt-3 mb-5" id="H_ocup">
+                        <div class="col-md-4 mb-3" id="H_ocup">
                             <div>
                                 <!-- DATOS ASINCRONOS -->
                             </div>
                         </div>
-                        <div class="col mt-3 mb-5" id="H_limp">
+                        <div class="col-md-4 mb-3" id="H_limp">
                             <div>
                                 <!-- DATOS ASINCRONOS -->
                             </div>
                         </div>
 
                     </div>
+
+                    
                 
-                    <div class="mt-1" id="cardH">
+                    <div class="mt-1" id="cardH">                                        
                         <div class="row">
                             <!-- DATOS ASINCRONOS -->
                         </div>
                     </div>
 
+                </div>
+
+
+
+                
+                <!-- Modal Registro -->
+                
+                <div class="modal fade" id="modal-registro" tabindex="-1"   role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalTitleId">Registrar habitacion</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            <form action="" autocomplete="off" id="form_habitacion">
+                                        <div class="mb-3">
+                                            <label for="tipoHabitacion" class="form-label">Tipo de habitacion</label>
+                                            <select  id="tipoHabitacion" class="form-select">
+                                                <option value="">Selección</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="numcamas" class="form-label">Numero de camas</label>
+                                            <input type="number" id="numcamas" class="form-control form-control-sm">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="numhabitacion" class="form-label">Numero de habitacion</label>
+                                            <input type="number" id="numhabitacion" class="form-control form-control-sm">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="piso" class="form-label">Piso</label>
+                                            <input type="number" id="piso" class="form-control form-control-sm">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="capacidad" class="form-label">Capacidad</label>
+                                            <input type="number" id="capacidad" class="form-control form-control-sm">
+                                        </div>   
+                                        <div class="mb-3">
+                                            <label for="precio" class="form-label">Precio</label>
+                                            <input type="number" id="precio" class="form-control form-control-sm">
+                                        </div>      
+                            </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn " style="background-color: #27AE60 ;" id="btnR">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
           
@@ -169,18 +224,16 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
         <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
-  
+          <!-- CDN sweetAlert2 -->
+          <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="../js/cards-habitaciones.js"></script>
         <script>      
  
           document.addEventListener("DOMContentLoaded", () =>{        
             const cardH = document.querySelector("#cardH");
             const cuerpoCard = cardH.querySelector("div");
-            const cardDispo = document.querySelector("#H_dispo");
-            const cuerpoDispo = cardDispo.querySelector("div");
-            const cardOcup = document.querySelector("#H_ocup");
-            const cuerpoOcup = cardOcup.querySelector("div");
-            const cardLimp = document.querySelector("#H_limp");
-            const cuerpoLimp = cardLimp.querySelector("div");
+            const lsTipoH = document.querySelector("#tipoHabitacion");
+            const btnRegistrar = document.querySelector("#btnR")
 
             function getHabitaciones(){
               const data = new URLSearchParams();
@@ -196,10 +249,10 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                 datos.forEach(element => {
                   let row = `
                   <div class="col-12 col-md-3 col-lg-3 mb-3">
-                    <div class="card shadow carD" data-bs-toggle="modal" data-bs-target="#modalId">
+                    <div class="card shadow dispo" data-bs-toggle="modal" data-bs-target="#modalId">
                         <div class="card-body">
-                        <h4 class="card-title">Nro° ${element.numhabitacion}</h4>
-                        <p class="card-text">Tipo: ${element.tipo}</p> 
+                        <h4 class="card-title">Nro° ${element.numhabitacion}</h4>                        
+                        <p class="card-text">S/.${element.precio} , Tipo: ${element.tipo}</p> 
                         <p class="card-text cd">${element.estado}</p>                                         
                         </div>                    
                     </div>
@@ -211,89 +264,89 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
               
             }
 
-            function getDisponibles(){
-                const data = new URLSearchParams();
-                data.append("operacion" , "hDisponiblesGet");
+            function mostrarTipoH(){
+            const parameters = new URLSearchParams();
+            parameters.append("operacion", "mostrarTipoH");                
 
                 fetch("../controller/habitacion.controller.php", {
                     method: 'POST',
-                    body: data
+                    body: parameters
                 })
                 .then(response => response.json())
-                .then(datos => {
-                    cuerpoDispo.innerHTML = ``
-                    datos.forEach(element => {
-                        let row = `
-                    <div class="card shadow cardDispo">
-                        <div class="card-body">             
-                        <p class="card-text">Habitaciones Disponibles:</p> 
-                        <p class="card-text">${element.habitaciones_disponibles}</p>                                         
-                        </div>                    
-                    </div>                                        
-                        `;
-                        cuerpoDispo.innerHTML += row;
+                .then(data => {                        
+                    lsTipoH.innerHTML = "<option value=''>Seleccione</option>";
+                    data.forEach(element => {
+                        const optionTag = document.createElement("option");
+                        optionTag.value = element.idtipohabitacion
+                        optionTag.text = element.tipo;
+                        lsTipoH.appendChild(optionTag);                        
                     });
-                });
+            });
+
             }
 
-            function getOcupadas(){
-                const data = new URLSearchParams();
-                data.append("operacion" , "hOcupadasGet");
+            function registrarHabitacion(){
+                    Swal.fire({
+                        title: "¿Está seguro de registrar?",
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonText: "Sí",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonColor: '#03643a',
+                        customClass: {
+                            confirmButton: "spacing",
+                            cancelButton: "spacing"
+                        }
 
-                fetch("../controller/habitacion.controller.php", {
-                    method: 'POST',
-                    body: data
-                })
-                .then(response => response.json())
-                .then(datos => {
-                    cuerpoOcup.innerHTML = ``
-                    datos.forEach(element => {
-                        let row = `                   
-                    <div class="card shadow cardOcup">
-                        <div class="card-body">             
-                        <p class="card-text">Habitaciones Ocupadas:</p> 
-                        <p class="card-text">${element.habitaciones_ocupadas}</p>                                         
-                        </div>                    
-                    </div>                                                         
-                        `;
-                        cuerpoOcup.innerHTML += row;
-                    });
-                });
-            }
 
-            function getMantenimiento(){
-                const data = new URLSearchParams();
-                data.append("operacion" , "hLimpiezaGet");
+                    }).then((result)=>{
+                        if(result.isConfirmed){
 
-                fetch("../controller/habitacion.controller.php", {
-                    method: 'POST',
-                    body: data
-                })
-                .then(response => response.json())
-                .then(datos => {
-                    cuerpoLimp.innerHTML = ``
-                    datos.forEach(element => {
-                        let row = `                   
-                    <div class="card shadow cardLimp">
-                        <div class="card-body">             
-                        <p class="card-text">Habitaciones en Limpieza:</p> 
-                        <p class="card-text">${element.habitaciones_Limpieza}</p>                                         
-                        </div>                    
-                    </div>                                                         
-                        `;
-                        cuerpoLimp.innerHTML += row;
-                    });
-                });
-            }
+                        const parameters = new URLSearchParams();
+                        parameters.append("operacion", "habitacionRegistrar");
+                        parameters.append("idtipohabitacion", document.querySelector("#tipoHabitacion").value);
+                        parameters.append("numcamas", document.querySelector("#numcamas").value);
+                        parameters.append("numhabitacion", document.querySelector("#numhabitacion").value);
+                        parameters.append("piso", document.querySelector("#piso").value);
+                        parameters.append("capacidad", document.querySelector("#capacidad").value);
+                        parameters.append("precio", document.querySelector("#precio").value);
+                
+                        fetch("../controller/habitacion.controller.php", {
+                            method: 'POST',
+                            body: parameters
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            if(data.status){
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Nueva habitacion registrada',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                    })
+                                document.querySelector("#form_habitacion").reset(); 
+                                $("#modal-registro").modal('hide');                                                                                      
+                            }else{
+                                Swal.fire("Error", data.message, "error");                                
+                            }
+                        });
+
+                        }
+                    });                   
+                }
+
+
+      
 
 
 
 
 
             getHabitaciones();
-            getDisponibles();
-            getOcupadas();
-            getMantenimiento();
+            mostrarTipoH();
+            btnRegistrar.addEventListener("click", registrarHabitacion);
             
           });
 

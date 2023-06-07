@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", () =>{
                 }
             ]
         }
+       
+      
     })
 
     function renderGrafico(datos = []){

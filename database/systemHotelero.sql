@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS sistema_hotelero;
+qDROP DATABASE IF EXISTS sistema_hotelero;
 
 
 CREATE DATABASE sistema_hotelero;
@@ -17,6 +17,8 @@ CREATE TABLE personas
 	CONSTRAINT uk_per_tel UNIQUE(dni)
 )
 ENGINE = INNODB;
+
+ALTER TABLE personas MODIFY COLUMN fechaNac DATE NULL;
 
 INSERT INTO personas (nombres, apellidos, dni, telefono, fechaNac) VALUES
 			('Luis David','Cusi Gonzales','73196921','934651825','2003-09-06'),
@@ -363,11 +365,32 @@ BEGIN
 	SELECT 	HA.idhabitacion, 
 		CONCAT(TH.tipo, '  N°', HA.numhabitacion) AS habitacion
 	FROM habitaciones HA
-	INNER JOIN tipohabitaciones TH ON TH.idtipohabitacion = HA.idtipohabitacion;
+	INNER JOIN tipohabitaciones TH ON TH.idtipohabitacion = HA.idtipohabitacion
+	WHERE estado = 'Disponible';
 	
 END $$
 
 CALL spu_recuperar_habitaciones();
+
+-- REGISTRAR UNA HABITACION
+DELIMITER $$
+CREATE PROCEDURE spu_habitaciones_registrar
+(
+IN _idtipohabitacion	INT,
+IN _numcamas		TINYINT,
+IN _numhabitacion	SMALLINT,
+IN _piso		TINYINT,
+IN _capacidad		VARCHAR(10),
+IN _precio		DECIMAL(5,2)
+)
+BEGIN
+
+INSERT INTO habitaciones (idtipohabitacion, numcamas, numhabitacion, piso, capacidad, precio) VALUES
+	(_idtipohabitacion, _numcamas, _numhabitacion, _piso , _capacidad, _precio);
+
+END $$
+
+CALL spu_habitaciones_registrar(1, 1, 107, 1, 2, 40);
 
 
 -- MOSTRAR DATOS DE HABITACION
@@ -375,7 +398,7 @@ CALL spu_recuperar_habitaciones();
 DELIMITER $$
 CREATE PROCEDURE spu_habitaciones_data()
 BEGIN
-	SELECT 	HA.numhabitacion,
+	SELECT 	HA.numhabitacion, HA.precio,
 		TH.tipo, HA.estado
 	FROM habitaciones HA
 	INNER JOIN tipohabitaciones TH ON TH.idtipohabitacion = HA.idtipohabitacion;
@@ -542,6 +565,47 @@ BEGIN
 END $$
 
 CALL spu_montoTotal_grafico();
+
+-- REGISTRAR UN CLIENTE 
+DELIMITER $$
+CREATE PROCEDURE spu_cliente_registrar
+(
+IN _nombres 	VARCHAR(30),
+IN _apellidos 	VARCHAR(30),
+IN _dni 	CHAR(8),
+IN _telefono 	CHAR(9),
+IN _fechaNac	DATE
+)
+BEGIN 
+	IF _telefono = '' THEN SET _telefono = NULL;	
+	END IF;
+	
+	IF _fechaNac = '' THEN SET _fechaNac = NULL;
+	END IF;
+
+INSERT INTO personas (nombres, apellidos, dni , telefono, fechaNac) VALUES
+		(_nombres, _apellidos, _dni , _telefono, _fechaNac);
+		
+END $$
+
+CALL spu_cliente_registrar('Ana Cecilia','Castillon Paucar','7548765','943655453','2003-03-06');
+
+
+-- LISTAR UN CLIENTE
+
+DELIMITER $$
+CREATE PROCEDURE spu_cliente_listar()
+BEGIN 
+
+SELECT 	idpersona, nombres, apellidos,
+	dni, telefono, DATE(fechaNac) AS fechaNac
+FROM personas;
+
+		
+END $$
+
+CALL spu_cliente_listar();
+
 
 
 

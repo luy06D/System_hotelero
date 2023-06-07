@@ -19,16 +19,15 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <title>Dashboard - SB Admin</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="../style/styles.css" rel="stylesheet" />
-        <link rel="stylesheet" href="../style/inicio.css">
-        <link rel="stylesheet" href="../style/card.css">
+        <link rel="stylesheet" href="../style/inicio.css">    
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
           <!-- Datatable for BS5 -->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
+
     </head>
     <body class="sb-nav-fixed">
-        
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-success">
             <!-- Navbar Brand-->
 
@@ -111,38 +110,66 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
             </div>
             <div id="layoutSidenav_content">
                 <!-- CONTENIDO -->
-    
-                <div class="container text-center">
-                    <div class="row">
-                        <div class="col-md-10 col-lg-6 mt-3 mb-3">
-                            <div class="card" >
-                                <div class="card-header text-white" style="background-color: #E74C3C;">
-                                    Cantidad de reservaciones por dia
+
+                <div class="container">
+                    <div class="row mt 3">
+                        <div class="col-md-4">
+                            <form action="" autocomplete="off" id="form_clientes">
+                                <div class="card mt-4">
+                                    <div class="card-header">
+                                        Registro de clientes
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="nombres" class="form-label">Nombres</label>
+                                            <input type="text" id="nombres" class="form-control form-control-sm">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="apellidos" class="form-label">Apellidos</label>
+                                            <input type="text" id="apellidos" class="form-control form-control-sm">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="dni" class="form-label">DNI</label>
+                                            <input type="number" id="dni" class="form-control form-control-sm">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="telefono" class="form-label">Telefono</label>
+                                            <input type="number" id="telefono" class="form-control form-control-sm">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="fechaNac" class="form-label">Fecha de Nacimiento</label>
+                                            <input type="date" id="fechaNac" class="form-control form-control-sm">
+                                        </div>        
+
+                                        <div class="d-grid gap-2">
+                                        <button style="background-color: #5DADE2; color:#ffffff" class="btn" id="btnRegistrar" type="button" >Registrar</button>                                            
+                                        </div>                                
+                                    </div>
+                                  
                                 </div>
-                                <div class="card-body" >
-                                    <!-- Aqui se renderiza en grafico -->
-                                    <canvas id="graficoReservaciones" class="mt-5 mb-5"></canvas>
-                                    <h5 class="card-title mt-3"></h5>
-                                </div>
-                            </div>
+
+                            </form>
                         </div>
-                        <div class="col-md-10 col-lg-5 mt-3">
-                            <div class="card" >
-                                <div class="card-header text-white" style="background-color: #27AE60;">
-                                    Monto de venta por semana
+                                        <!-- Tabla -->
+                            <div class="col-md-8 tableR ">
+                                <table id="table_clientes" class="table table-bordered border-secondary table-sm display responsive nowrap"  width="100%" >
+                                    <thead>
+                                    <tr>                                           
+                                        <th>Nombres</th>
+                                        <th>Apellidos</th>
+                                        <th>DNI</th>
+                                        <th>Telefono</th>
+                                        <th>Fecha de Nacimiento</th>                        
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- DATOS ASINCRONOS -->
+                                    </tbody>
+                                </table>
                                 </div>
-                                <div class="card-body">
-                                    <!-- Aqui se renderiza en grafico -->
-                                    <canvas id="graficoMonto"></canvas>
-                                    <h5 class="card-title mt-2"></h5>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
-
-
-          
+   
             </div>
         </div>
        
@@ -157,10 +184,84 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
         <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
-            <!-- CDN para crear graficos -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="../js/grafico1.js"></script>
-        <script src="../js/grafico2.js"></script>
+        <!-- SweetAlert2 CDN -->
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+
+            $(document).ready(function (){
+
+                function clientesListar(){
+              $.ajax({
+                url:'../controller/cliente.controller.php',
+                type: 'POST',
+                data: {'operacion' : 'clientesListar'},
+                success: function (result){
+
+                  var tablaDT = $("#table_clientes").DataTable();
+                  tablaDT.destroy();
+
+                  $("#table_clientes tbody").html(result);
+
+                  $("#table_clientes").DataTable({
+                    dom: 'Bfrtip',
+                    responsive:true,
+                    language: {
+                                url: '../js/Spanish.json'
+                            }
+                  });
+                }
+              });
+            }
+
+            function clientesRegistrar(){
+
+                let dataR = {
+                    'operacion'     :'clientesRegistrar',
+                    'nombres'       : $("#nombres").val(),
+                    'apellidos'     : $("#apellidos").val(),
+                    'dni'           : $("#dni").val(),
+                    'telefono'      : $("#telefono").val(),
+                    'fechaNac'      : $("#fechaNac").val(),
+                };
+
+                Swal.fire({
+                    title: "¿Desea registrar un nuevo cliente?",                    
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonColor: "#28B463",
+                    cancelButtonColor: "#5DADE2",
+                    confirmButtonText: "Confirmar",
+                    cancelButtonText: "Cancelar",
+
+                }).then(function (result){
+                    if(result.isConfirmed){
+                        $.ajax({
+                            url: '../controller/cliente.controller.php',
+                            type: 'POST',
+                            data: dataR,
+                            success: function(result){                                
+                                clientesListar();
+                                $("#form_clientes")[0].reset();
+                                
+
+                            }
+                        });
+                    }
+                })
+
+            }
+
+            $("#btnRegistrar").click(clientesRegistrar);
+
+            clientesListar();
+
+
+            });
+        </script>
 
     </body>
 </html>
+
+
+

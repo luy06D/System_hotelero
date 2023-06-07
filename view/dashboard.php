@@ -21,6 +21,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="../style/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="../style/inicio.css">
+        <link rel="stylesheet" href="../style/cardH.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
           <!-- Datatable for BS5 -->
@@ -88,6 +89,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="./clientes.php">Nuevo Cliente</a>
                                     <a class="nav-link" href="./usuarios.php">Nuevo Usuario</a>
                                     <a class="nav-link" href="">Nuevo Empleado</a>
                                 </nav>
@@ -113,22 +115,56 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                 <!-- CONTENIDO -->
 
                 <div class="container">
+                    <div class="row mt-3">
+                        <div class="col-md-4 mb-3" id="H_dispo">
+                            <div>
+                                <!-- DATOS ASINCRONOS -->
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3 " id="H_ocup">
+                            <div>
+                                <!-- DATOS ASINCRONOS -->
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3 " id="H_limp">
+                            <div>
+                                <!-- DATOS ASINCRONOS -->
+                            </div>
+                        </div>
+
+                    </div>
+                
+                    <div class="mt-1" id="cardH">
+                        <div class="row">
+                            <!-- DATOS ASINCRONOS -->
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="container text-center">
                     <div class="row">
                         <div class="col-md-10 col-lg-6 mt-3 mb-3">
-                            <div class="card">
-                                <div class="card-body">
+                            <div class="card text-center" >
+                                <div class="card-header text-white" style="background-color: #E74C3C;">
+                                    Cantidad de reservaciones por dia
+                                </div>
+                                <div class="card-body" >
                                     <!-- Aqui se renderiza en grafico -->
-                                    <canvas id="graficoReservaciones"></canvas>
-                                    <h5 class="card-title mt-3">Gráfico 1</h5>
+                                    <canvas id="graficoReservaciones" class="mt-5 mb-5"></canvas>
+                                    <h5 class="card-title mt-3"></h5>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-10 col-lg-5 mt-3">
-                            <div class="card">
+                            <div class="card" >
+                                <div class="card-header text-white" style="background-color: #27AE60;">
+                                    Monto de venta por semana
+                                </div>
                                 <div class="card-body">
                                     <!-- Aqui se renderiza en grafico -->
                                     <canvas id="graficoMonto"></canvas>
-                                    <h5 class="card-title mt-2">Gráfico 2</h5>
+                                    <h5 class="card-title mt-2"></h5>
                                 </div>
                             </div>
                         </div>
@@ -157,9 +193,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                     </tbody>
                   </table>
                 </div>
-            
-                <!-- Modal Body -->
-                <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+
                 <div class="modal fade" id="modal-actualizar" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered " role="document">
                         <div class="modal-content">
@@ -253,6 +287,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- CDN para crear graficos -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="../js/cards-habitaciones.js"></script>
         <script src="../js/grafico1.js"></script>
         <script src="../js/grafico2.js"></script>
         <script src="../js/mostrarSelect.js"></script>

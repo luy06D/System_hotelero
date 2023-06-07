@@ -9,11 +9,13 @@ document.addEventListener("DOMContentLoaded", () => {
             datasets: [
                 {
                     backgroundColor: ['#8E44AD','#18BC51','#FF4343','#BB62E3','#62E3AD'],
-                    label: 'Cantidad de reservaciones por semana',
+                    label: 'Cantidad de reservaciones por semana ',
                     data: []
                 }            
             ]
         }
+  
+    
     })
 
     function renderGrafico(datos = []){

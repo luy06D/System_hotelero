@@ -8,18 +8,15 @@
   
 }
 
-.cardDispo{
-  background-color: #54BD1A;
-  color: white;
 
+.dispo {
+  border-left: 5px solid #28B463;
 }
 
-.cardOcup{
-  background-color:#E74C3C ;
-  color: white;
+.ocup {
+  border-left: 5px solid #E74C3C;
 }
 
-.cardLimp{
-  background-color:#CBC22A;
-  color: white;
+.limp {
+  border-left: 5px solid #F4D03F;
 }

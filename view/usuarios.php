@@ -84,6 +84,7 @@ if(!isset($_SESSION['segurity']) || $_SESSION['segurity']['login'] == false ){
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="./clientes.php">Nuevo Cliente</a>
                                     <a class="nav-link" href="layout-static.html">Nuevo Usuario</a>
                                     <a class="nav-link" href="layout-sidenav-light.html">Nuevo Empleado</a>
                                 </nav>

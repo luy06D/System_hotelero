@@ -7,6 +7,7 @@
     const lsCliente = document.querySelector("#idcliente");
     const btnRegistrar = document.querySelector("#guardar");
     const btnReset = document.querySelector("#btnReset");
+    const lsTipoH = document.querySelector("#tipoHabitacion")
     
 
 
@@ -91,15 +92,15 @@
         });
     }
 
+    
 
-   
 
 
     mostrarEmpleado();
     mostrarUsuario();
     mostrarHabitacion();
     mostrarCliente();
-
+ 
 
 
     btnRegistrar.addEventListener("click", registrarReservacion); 
