@@ -406,6 +406,15 @@ END $$
 
 CALL spu_habitaciones_data();
 
+-- MOSTRAR TIPO DE HABITACIONES
+DELIMITER $$
+CREATE PROCEDURE spu_mostrar_tipoH()
+BEGIN
+	SELECT 	idtipohabitacion, tipo
+	FROM tipohabitaciones;
+
+END $$
+
 -- NUMERO DE HABITACIONES DISPONIBLES
 
 DELIMITER $$ 
